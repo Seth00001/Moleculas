@@ -2,8 +2,6 @@ package gui;
 
 import java.util.ArrayList;
 
-import engine.Area;
-
 public class Main {
 
 	public static void main(String[] args) {
