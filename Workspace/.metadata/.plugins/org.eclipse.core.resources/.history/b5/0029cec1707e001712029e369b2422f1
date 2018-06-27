@@ -1,0 +1,96 @@
+package engine;
+
+import gui.Window;
+import hexagonalGrid.HexGrid;
+import physicsCore.ThreadPool;
+
+public class Main {
+	/**
+	 * @param args
+	 */
+	static long steps = 0;
+	
+	public static void main(String[] args) {
+		
+		HexGridHelper helper = new HexGridHelper(fillGrid());
+		helper.saveForUser("");
+		
+		Window win = new Window();
+		win.setHelper(helper);
+		
+		ThreadPool pool = new ThreadPool();
+
+		//console view
+		pool.add(0, new Runnable(){
+			@Override
+			public void run() {
+				while(true) {
+					try {
+						Thread.currentThread().join(1000);
+
+						//System.out.println(helper.grid.moleculas.size());
+						
+						System.out.println(Window.steps);
+						helper.saveForUser(Window.steps + "");
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}});
+		
+		//calrulations run
+		
+		
+		
+//	/**/	pool.add(1, new Runnable() {
+//			public void run() {
+//				while(true) {
+//					helper.cycledMethod();
+//					steps++;
+//				}
+//			}
+//		});
+		
+		//gui view
+		pool.add(2, new Runnable() {
+			@Override
+			public void run() {
+				while(true) {
+					win.refreshPanel();
+					try {
+						Thread.currentThread().join(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		helper.BEGINTHISSHIT();
+		System.out.println("done");		
+	}
+	
+	public static HexGrid fillGrid() {
+		HexGrid h = new HexGrid(35, 35, 10);
+		
+		h.p0 = 5;
+		h.p1 = 0.4;
+		h.p1 = Math.pow(h.p1, h.p0);
+		
+		h.placeOne(5, 5, 0);
+//		int c = 10;
+//		for(int i = c; i < h.dimX - c; i++) {
+//			for(int j = c; j < h.dimY - c; j++) {
+//				for(int k = 0; k < h.dimZ - 1; k++) {
+//					h.placeOne(i, j, k);
+//				}
+//			}
+//		}
+//		
+		return h;
+	}
+}
+
+
