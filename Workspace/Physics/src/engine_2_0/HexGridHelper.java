@@ -158,7 +158,7 @@ public class HexGridHelper implements Paintable{
 			for(int k = 0; k < grid.dimZ; k++) {
 				for(int j = 0; j < grid.dimY; j++) {
 					for(int i = 0; i < grid.dimX; i++) {
-						if(grid.volume[i][j][k] /*&& grid.getNeirbourgsCount(i, j, k) > 0*/) {
+						if(grid.volume[i][j][k] && grid.getNeirbourgsCount(i, j, k) > 0) {
 							
 //							System.out.println(i + " | " + j + " | " + k);
 							
