@@ -24,7 +24,6 @@ public class HoldedThread implements Runnable{
 				try {
 					Thread.currentThread().join(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//Thread.currentThread().yield();

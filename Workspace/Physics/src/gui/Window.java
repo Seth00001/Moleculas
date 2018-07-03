@@ -78,7 +78,6 @@ public class Window extends JFrame{
 			try {
 				helper.saveAsDatFile("Dats//" + helper.step + ".txt");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 //			helper.saveForUser("");

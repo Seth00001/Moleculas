@@ -18,7 +18,7 @@ public class Main {
 		dim = 100;
 		
 
-		HexGridHelper helper = new HexGridHelper(createGrid(200, 200, 200));
+		HexGridHelper helper = new HexGridHelper(createGrid(400, 400, 400));
 	
 
 //		HexGridHelper helper = new HexGridHelper();
@@ -43,7 +43,6 @@ public class Main {
 					try {
 						Thread.currentThread().sleep(win.backupPeriod);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					System.out.println(helper.step);
@@ -60,13 +59,18 @@ public class Main {
 		//grid.populateAllLevels((int)(10/*grid.dimX * grid.dimY * grid.dimZ * grid.concentration*/));
 		
 		Point p;
-		Point cen = new Point(700, 700, 700);
+		Point cen = new Point(70, 70, 70);
 		
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				for(int k = 0 ; k < grid.dimZ; k++) {
 					
-					if(k == i ) {
+//					if(Math.random() < 0.1 && grid.isInRefillingVolume(i, j, k)) {
+//						grid.setPoint(i, j, k);
+//					}
+//					
+					if(grid.normal.x * i + grid.normal.y * j + grid.normal.z * k == 1
+							&& grid.validate(i, j, k)) {
 						grid.setPointUnchecked(i, j, k);
 						//grid.setPoint(i, j, k);
 					}

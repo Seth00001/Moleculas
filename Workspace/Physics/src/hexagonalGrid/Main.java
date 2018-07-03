@@ -18,7 +18,6 @@ public class Main {
 			try {
 				Thread.currentThread().sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			grid.HorsPlaneXY(30);	

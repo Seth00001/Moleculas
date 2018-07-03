@@ -375,26 +375,13 @@ public class HexGridHelper implements Paintable{
 		
 		try {
 			reader = new BufferedReader(new FileReader(f));
-			
-		
-			
-			
-			
+
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
-		
-		
-		
+
 	}
 	
 	public Point parseCoordString(String s) {

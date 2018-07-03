@@ -17,7 +17,6 @@ public class Main {
 					try {
 						Thread.currentThread().join(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -32,7 +31,6 @@ public class Main {
 //			try {
 //				Thread.currentThread().join(10);
 //			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 //			
