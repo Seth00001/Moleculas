@@ -24,10 +24,10 @@ public class HexGrid implements Serializable{ //2.0
 	//public Point ox = new Point(0.86602, 0, 0.5);
 	
 	public 	double d; //2500000;
-	public int x0, xA, y0, yA, z0, zA, calculateBoundary, higherBoundary = 1300, lowerBoundary = 1000,  radius = 100000;
+	public int x0, xA, y0, yA, z0, zA, calculateBoundary, higherBoundary = 1300, lowerBoundary = 1000,  radius = 1000000;
 	//public double coefA = 1, coefB = 0, coefC = 0, offsetA = 0, offsetB = 1100, offsetC = 1100;
-	public DPoint normal = new DPoint(-1, 2, 1)
-	, offset = new DPoint(1000, 3500, 2500);
+	public DPoint normal = new DPoint(-4, 1, 2)
+	, offset = new DPoint(1000, 1000, 1000);
 	
 	
 	public double concentration = 0.01000; //0.00360 //0.02653815
@@ -102,7 +102,7 @@ public class HexGrid implements Serializable{ //2.0
 				+ ((p.z - d * normal.z - offset.z))*((p.z - d * normal.z - offset.z)) <= radius
 				
 
-				&& normal.x * x + normal.y * y + normal.z * z < 105
+				&& normal.x * x + normal.y * y + normal.z * z < 170//105
 				&& normal.x * x + normal.y * y + normal.z * z > 0
 				//&& x + y + z <= higherBoundary//90000
 				);
@@ -376,7 +376,7 @@ public class HexGrid implements Serializable{ //2.0
 	public boolean isInRefillingVolume(int i, int j, int k) {
 		return(
 					validate(i, j, k)
-					&& normal.x * i + normal.y * j + normal.z * k > 80 //105
+					&& normal.x * i + normal.y * j + normal.z * k > 150//80 //105
 				);	
 	}
 	
@@ -388,7 +388,7 @@ public class HexGrid implements Serializable{ //2.0
 		int count = 0;
 		
 		for(int k = 0; k < dimZ; k++) {
-			for(int i = dimX/2; i < dimX ; i++) {
+			for(int i = 0; i < dimX ; i++) {
 				for(int j = 0; j < dimY; j++) {
 					if( isInRefillingVolume(i, j, k)
 						&& volume[i][j][k]){
@@ -404,7 +404,7 @@ public class HexGrid implements Serializable{ //2.0
 		int count = 0;
 		
 		for(int k = 0; k < dimZ; k++) {
-			for(int i = dimX/2; i < dimX ; i++) {
+			for(int i = 0; i < dimX ; i++) {
 				for(int j = 0; j < dimY; j++) {
 					if( isInRefillingVolume(i, j, k)) 							
 						{
@@ -413,6 +413,7 @@ public class HexGrid implements Serializable{ //2.0
 				}
 			}
 		}		
+//		System.out.println("Count is:" + count);
 		return count;
 	}
 	
