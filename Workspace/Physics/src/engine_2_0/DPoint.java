@@ -9,7 +9,7 @@ public class DPoint {
 		z = 0;
 	}
 	
-	public DPoint(int X, int Y, int Z) {
+	public DPoint(double X, double Y, double Z) {
 		x = X;
 		y = Y;
 		z = Z;

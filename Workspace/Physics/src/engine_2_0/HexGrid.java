@@ -17,10 +17,16 @@ public class HexGrid implements Serializable{ //2.0
 	public int radiusA, radiusB;
 	
 	public double p0, p1, ep0;
-	public int ax = 10;  //відстань між атомами
-	public int ay = 6;   //відступи
-	public int az = 10;
-	public int a2 = 3;
+	public double a = 1;  //відстань між атомами
+	double 
+		kx = a * 3 * Math.sqrt(3) * 0.25,
+		ky = a * 3 * 0.25,
+		kz = a,
+		dx = a * Math.sqrt(3) * 0.25,
+		dy = 0,
+		dz = a * 0.5;
+	
+	
 	//public Point ox = new Point(0.86602, 0, 0.5);
 	
 	public 	double d; //2500000;
@@ -87,29 +93,29 @@ public class HexGrid implements Serializable{ //2.0
 		int i, j, k;
 
 
-		Point p = toSpaceCoordinates(x, y, z);
-		d = (normal.x*p.x + normal.y*p.y + normal.z*p.z - normal.x*offset.x - normal.y*offset.y - normal.z*offset.z) 
-				/ (normal.x * normal.x + normal.y * normal.y + normal.z * normal.z) ;
-		
+//		Point p = toSpaceCoordinates(x, y, z);
+//		d = (normal.x*p.x + normal.y*p.y + normal.z*p.z - normal.x*offset.x - normal.y*offset.y - normal.z*offset.z) 
+//				/ (normal.x * normal.x + normal.y * normal.y + normal.z * normal.z) ;
+//		
 		return( ( !( x < 0 ||  y < 0 || z < 0 || x >= dimX || y >= dimY || z >= dimZ) )
 				 //&& (  (p.x- center.x)*(p.x - center.x) + (p.y - center.y)*(p.y - center.y) + (p.z - center.z)*(p.z - center.z) < radiusB*radiusB )  
 				//&& x + y + z >= lowerBoundary//400 
 				
 				//&& (p.x - 6*d)*(p.x - 6*d) + (p.y - 10*d)*(p.y - 10*d) + (p.z - 6*d)*(p.z - 6*d) <= radius//900000
 				
-				&& ((p.x - d * normal.x - offset.x))*((p.x - d * normal.x - offset.x))
-				+ ((p.y - d * normal.y - offset.y))*((p.y - d * normal.y - offset.y)) 
-				+ ((p.z - d * normal.z - offset.z))*((p.z - d * normal.z - offset.z)) <= radius
-				
-
-				&& normal.x * x + normal.y * y + normal.z * z < 170//105
-				&& normal.x * x + normal.y * y + normal.z * z > 0
+//				&& ((p.x - d * normal.x - offset.x))*((p.x - d * normal.x - offset.x))
+//				+ ((p.y - d * normal.y - offset.y))*((p.y - d * normal.y - offset.y)) 
+//				+ ((p.z - d * normal.z - offset.z))*((p.z - d * normal.z - offset.z)) <= radius
+//				
+//
+//				&& normal.x * x + normal.y * y + normal.z * z < 170//105
+//				&& normal.x * x + normal.y * y + normal.z * z > 0
 				//&& x + y + z <= higherBoundary//90000
 				);
 	}
 	
 	public boolean isCross(int i, int j, int k) {
-		return ((i + j + k) %2 == 0);		
+		return ((i + j + k) %2 == 1);		
 	}
 	
 	public boolean isCross(Point p) {
@@ -335,39 +341,39 @@ public class HexGrid implements Serializable{ //2.0
 		setPoint(p.x, p.y, p.z);
 	}
 
-	public Point toSpaceCoordinates(int x, int y, int z) {
-		int i, j, k;
+	public DPoint toSpaceCoordinates(int x, int y, int z) {
+		DPoint p = new DPoint();
+
+		p.x =  kx * x;
+		p.y =  ky * y;
+		p.z =  kz * z;
 		
-		i =  ax * x;
-		j =  ay * y;
-		k =  az * z;
-		
-		if(z % 2 == 0) {
-			
-			if(!isCross(x, y, z)) {
-				i = i - a2;
-			}
-		}
-		else {
-			if(isCross(x, y, z)) {
-				i = i - a2;
-			}
+		if(isCross(x, y, z)) {
+			p.x += dx;
+			p.y += dy;
+			p.z += dz;
 		}
 		
-		if(!isCross(x, y, z)) {
-			k = k - a2; 
-		}
 		
-		return(new Point (i, j, k));
-	}
-	
-	public Point toSpecCoordinates(int i, int j, int k) {
-		Point p = new Point();
-		
-		
+//		if(z % 2 == 0) {
+//			
+//			if(!isCross(x, y, z)) {
+//				i = i - a2;
+//			}
+//		}
+//		else {
+//			if(isCross(x, y, z)) {
+//				i = i - a2;
+//			}
+//		}
+//		
+//		if(!isCross(x, y, z)) {
+//			k = k - a2; 
+//		}
 		
 		return(p);
 	}
+
 	
 //	#endregion
 	
