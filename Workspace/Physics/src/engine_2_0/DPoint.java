@@ -14,4 +14,10 @@ public class DPoint {
 		y = Y;
 		z = Z;
 	}
+	
+	@Override
+	public String toString() {
+		return  x + "  " + y + "  " + z;
+	}
+	
 }

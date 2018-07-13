@@ -21,7 +21,7 @@ public class HexGrid implements Serializable{ //2.0
 	double 
 		kx = a * 3 * Math.sqrt(3) * 0.25,
 		ky = a * 3 * 0.25,
-		kz = a,
+		kz = a * 3 * Math.sqrt(3) * 0.25,
 		dx = a * Math.sqrt(3) * 0.25,
 		dy = 0,
 		dz = a * 0.5;
@@ -30,10 +30,10 @@ public class HexGrid implements Serializable{ //2.0
 	//public Point ox = new Point(0.86602, 0, 0.5);
 	
 	public 	double d; //2500000;
-	public int x0, xA, y0, yA, z0, zA, calculateBoundary, higherBoundary = 1300, lowerBoundary = 1000,  radius = 1000000;
+	public int x0, xA, y0, yA, z0, zA, calculateBoundary, higherBoundary = 1300, lowerBoundary = 1000,  radius = 10000;
 	//public double coefA = 1, coefB = 0, coefC = 0, offsetA = 0, offsetB = 1100, offsetC = 1100;
-	public DPoint normal = new DPoint(-4, 1, 2)
-	, offset = new DPoint(1000, 1000, 1000);
+	public DPoint normal = new DPoint(2, 1, -1)
+	, offset = new DPoint(150, 200, 130);
 	
 	
 	public double concentration = 0.01000; //0.00360 //0.02653815
@@ -93,24 +93,19 @@ public class HexGrid implements Serializable{ //2.0
 		int i, j, k;
 
 
-//		Point p = toSpaceCoordinates(x, y, z);
-//		d = (normal.x*p.x + normal.y*p.y + normal.z*p.z - normal.x*offset.x - normal.y*offset.y - normal.z*offset.z) 
-//				/ (normal.x * normal.x + normal.y * normal.y + normal.z * normal.z) ;
-//		
+		DPoint p = toSpaceCoordinates(x, y, z);
+		d = (normal.x*p.x + normal.y*p.y + normal.z*p.z - normal.x*offset.x - normal.y*offset.y - normal.z*offset.z) 
+				/ (normal.x * normal.x + normal.y * normal.y + normal.z * normal.z) ;
+		
 		return( ( !( x < 0 ||  y < 0 || z < 0 || x >= dimX || y >= dimY || z >= dimZ) )
-				 //&& (  (p.x- center.x)*(p.x - center.x) + (p.y - center.y)*(p.y - center.y) + (p.z - center.z)*(p.z - center.z) < radiusB*radiusB )  
-				//&& x + y + z >= lowerBoundary//400 
-				
-				//&& (p.x - 6*d)*(p.x - 6*d) + (p.y - 10*d)*(p.y - 10*d) + (p.z - 6*d)*(p.z - 6*d) <= radius//900000
-				
+
 //				&& ((p.x - d * normal.x - offset.x))*((p.x - d * normal.x - offset.x))
 //				+ ((p.y - d * normal.y - offset.y))*((p.y - d * normal.y - offset.y)) 
 //				+ ((p.z - d * normal.z - offset.z))*((p.z - d * normal.z - offset.z)) <= radius
 //				
 //
-//				&& normal.x * x + normal.y * y + normal.z * z < 170//105
-//				&& normal.x * x + normal.y * y + normal.z * z > 0
-				//&& x + y + z <= higherBoundary//90000
+//				&& normal.x * p.x + normal.y * p.y + normal.z * p.z < 50//105
+//				&& normal.x * p.x + normal.y * p.y + normal.z * p.z > 20
 				);
 	}
 	
@@ -354,6 +349,10 @@ public class HexGrid implements Serializable{ //2.0
 			p.z += dz;
 		}
 		
+		if(z%2 == 1) {
+			p.x += dx;
+		}
+
 		
 //		if(z % 2 == 0) {
 //			
@@ -380,9 +379,11 @@ public class HexGrid implements Serializable{ //2.0
 	//#region refilling
 	
 	public boolean isInRefillingVolume(int i, int j, int k) {
+		DPoint p = toSpaceCoordinates(i, j, k);
+		
 		return(
 					validate(i, j, k)
-					&& normal.x * i + normal.y * j + normal.z * k > 150//80 //105
+					&& normal.x * p.x + normal.y * p.y + normal.z * p.z > 30//80 //105
 				);	
 	}
 	
