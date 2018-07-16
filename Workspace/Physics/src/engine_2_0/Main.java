@@ -19,7 +19,7 @@ public class Main {
 		dim = 100;
 		
 
-		HexGridHelper helper = new HexGridHelper(createGrid( 100, 100, 100));
+		HexGridHelper helper = new HexGridHelper(createGrid(400, 400, 400));
 	
 
 //		HexGridHelper helper = new HexGridHelper();
@@ -64,8 +64,8 @@ public class Main {
 		
 		//grid.populateAllLevels((int)(10/*grid.dimX * grid.dimY * grid.dimZ * grid.concentration*/));
 		
-		Point p;
-		Point cen = new Point(90, 50, 50);
+		DPoint p;
+		Point cen = new Point(50, 50, 50);
 		
 	
 		
@@ -73,28 +73,29 @@ public class Main {
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				for(int k = 0 ; k < grid.dimZ; k++) {
+					p = grid.toSpaceCoordinates(i, j, k);
 					
-					if(
-							(i == 0 && j == 0)||
-							(i == 0 && k == 0)||
-							(j == 0 && k == 0)
-						) {
-						grid.setPoint(i,  j,  k);
-					}
+					
+//					if(
+//							(i == 0 && j == 0)||
+//							(i == 0 && k == 0)||
+//							(j == 0 && k == 0)
+//						) {
+//						grid.setPoint(i,  j,  k);
+//					}
 				
+//					if(Math.random() < 0.1 && grid.validate(i, j, k)) {
+//						grid.setPoint(i, j, k);
+//					}
+					
+					if((int) (grid.normal.x * p.x + grid.normal.y * p.y + grid.normal.z * p.z) == 0 && grid.validate(i, j, k)) {
+						grid.setPointUnchecked(i, j, k);
+					}
+					
+					
 				}
 			}
 		}
-		
-
-		
-		for(int i = 0; i < 100; i++) {
-			
-		}
-		
-		
-		
-		
 		
 		
 		//#endregion

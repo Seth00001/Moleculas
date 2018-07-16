@@ -299,8 +299,8 @@ public class HexGridHelper implements Paintable{
 		g.setColor(Color.BLUE);
 		g.drawRect(0, 0, (int)(p.x * cx), (int)(p.y * cx));
 		
-		for(int i = 0; i < 1; i++) {
-			for(int j = 0; j < 3; j++) {
+		for(int i = 0; i < grid.dimX; i++) {
+			for(int j = 0; j < grid.dimY; j++) {
 				if(grid.volume[i][j][currentlyPaintedPlane]) {
 					g.setColor(Color.BLUE);
 				}
