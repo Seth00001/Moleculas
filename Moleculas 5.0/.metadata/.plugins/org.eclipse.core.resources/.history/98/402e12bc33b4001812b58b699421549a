@@ -1,0 +1,34 @@
+package application;
+
+import engine.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Grid grid = new Grid(10, 10, 10);
+		GridHelper helper = new GridHelper();
+		helper.grid = grid;
+		
+		for(int i = 0; i < grid.dimX; i++) {
+			for(int j = 0; j < grid.dimY; j++) {
+				for(int k = 0; k < grid.dimZ; k++) {
+					grid.setPoint(i, j, k);
+				}
+			}
+		}
+		
+		try {
+			
+			helper.exportForVMD();	
+		}
+		catch(Exception e) {
+			
+		}
+		
+		
+		
+	}
+
+}
