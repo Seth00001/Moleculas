@@ -12,6 +12,13 @@ public class Grid {
 	public Random random;
 	public int dimX, dimY, dimZ;
 	
+	//#region environment parameters
+	
+	
+	public double alpha = 2; 
+	public double p0 = 0.6;
+	
+	//#endregion
 	
 	
 	private boolean[][][] validationPattern;
@@ -73,13 +80,26 @@ public class Grid {
 		random = new Random();
 	}
 	
-	//#region
+	public void setAlpha(double value) {
+		alpha = value;
+		double ep0 = Math.pow(Math.E, alpha);
+		p0 = Math.pow(0.685, alpha); // 0.685
+		
+		System.out.println(String .format("alpha: %s; p0: %s", alpha, p0));
+		
+	}
+	
+	public double getAlpha() {
+		return alpha;
+	}
+	
+	//region
 	
 	//marks dimensions and grid specifics
 	public boolean isValid(int x, int y, int z) {
 		return(
 				(x >= 0 && y >= 0 && z >= 0 && x < dimX && y < dimY && z < dimZ)
-				&& validationPattern[x % 5][y % 5][z % 5]
+				&& validationPattern[x % 4][y % 4][z % 4]
 			);
 	}
 	
@@ -90,11 +110,130 @@ public class Grid {
 		}
 	}
 	
+	public int getNeirbourghsCount(int x, int y, int z) {
+		int count = 0;
+		
+		for(int i = -1; i <= 1; i++ ) {
+			for(int j = -1; j <= 1; j++ ) {
+				for(int  k = -1; k <= 1; k++) {
+					if(isValid(x + i, y + j, z + k)
+							&& (i != 0 && j != 0 && k != 0)
+							&& grid[x + i][y + j][z + k]) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
 	
+	public ArrayList<PositionData> getBoundedPositionData(int x, int y, int z){
+		ArrayList<PositionData> data = new ArrayList<PositionData>();
+		
+		for(int i = -1; i <= 1; i++ ) {
+			for(int j = -1; j <= 1; j++ ) {
+				for(int  k = -1; k <= 1; k++) {
+					
+					if(isValid(x + i, y + j, z + k)
+							&& !(i == 0 && j == 0 && k == 0)
+							&& !grid[x + i][y + j][z + k]) {
+						data.add(new PositionData(x + i, y + j, z + k, 
+								Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k) - 1))
+								));
+					}
+				}
+			}
+		}
+		
+		data.add(new PositionData(x, y, z, Math.exp( alpha * (getNeirbourghsCount(x, y, z)))));
+		
+		return data;
+	}
 	
+	public ArrayList<PositionData> getFreePositionData(int x, int y, int z){
+		ArrayList<PositionData> data = new ArrayList<PositionData>();
+		
+		for(int i = -1; i <= 1; i++ ) {
+			for(int j = -1; j <= 1; j++ ) {
+				for(int  k = -1; k <= 1; k++) {
+
+					if(isValid(x + i, y + j, z + k)
+							&& !grid[x + i][y + j][z + k]) {
+						data.add(new PositionData(x + i, y + j, z + k, 
+								1
+								));
+					}
+				}
+			}
+		}
+		
+		data.add(new PositionData(x, y, z, 1));
+
+		return data;
+	}
 	
+	public PositionData getNextPosition(int x, int y, int z) {
+		ArrayList<PositionData> data;
+		if(getNeirbourghsCount(x, y, z) == 0) {
+			data = getFreePositionData(x, y, z);
+		}
+		else {
+			data = getBoundedPositionData(x, y, z);
+		}
+		
+		double amplitude = 0;
+		
+		for(int i = 0; i < data.size(); i++) {
+			amplitude += data.get(i).weight;
+		}
+		
+		double point = amplitude * random.nextDouble();
+		double sum = 0;
+		
+		for(int i = 0; i < data.size(); i++) {
+			sum += data.get(i).weight;
+			if(sum >= point) {
+				return data.get(i);
+			}
+		}
+		
+		return data.get(data.size() - 1);
+	}
+
+	//from, where
+	public void move(Point p, int i, int j, int k) {
+		grid[p.x][p.y][p.z] = false;
+		grid[i][j][k] = true;
+		p.x = i;
+		p.y = j;
+		p.z = k;
+	}
 	
-	//#endregion
+	public void jump(Point p) {
+		int count = getNeirbourghsCount(p.x, p.y, p.z);
+		if( count < 4 && random.nextDouble() < Math.pow(p0, count * 1.1)/*Math.exp(-1 * p0 * count) */) {
+			PositionData data = getNextPosition(p.x, p.y, p.z);
+			move(p, data.x, data.y, data.z);
+		}
+	}
+	
+	public void rearrange() {
+		
+		int x, y;
+		Point temp;
+		for(int i = 0; i < queue.size() / 2 ; i++) {
+			x = random.nextInt(queue.size());
+			y = random.nextInt(queue.size());
+			
+			temp = queue.get(x);
+			queue.set(x, queue.get(y));
+			queue.set(y, temp);
+			
+			temp = null;
+		}
+	}
+	
+	//endregion
 	
 	
 	

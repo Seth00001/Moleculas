@@ -1,0 +1,43 @@
+package application;
+
+import Helpers.Point;
+import engine.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Grid grid = new Grid(5, 5, 5);
+		GridHelper helper = new GridHelper();
+		helper.grid = grid;
+		
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 5; j++) {
+				for(int k = 0; k < 5; k++) {
+					grid.setPoint(i, j, k);
+				}
+			}
+		}
+		
+//		for(int i = 0; i < 100; i++) {
+//			for(Point p : grid.queue) {
+//				grid.jump(p);
+//			}
+//		}
+			try {
+			
+			helper.exportForVMD();	
+		}
+		catch(Exception e) {
+			
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+}

@@ -1,0 +1,88 @@
+package engine;
+
+import java.awt.Graphics2D;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import Helpers.Point;
+
+public class GridHelper implements IPaintable{
+
+	public Grid grid;
+	public boolean calculationRunning;  
+	
+	public GridHelper() {
+		calculationRunning = false;
+	}
+	
+	
+	public void exportForVMD() throws IOException {
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
+		
+		for(Point p : grid.queue) {
+			writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+		}
+		writer.flush();
+		writer.close();
+	}
+	
+	public String form(int number) {
+		String s = Double.toString(number / 10.0);
+
+		while (s.indexOf(".") < 3) {
+			s = "0" + s;
+		}
+
+		while (s.length() < 7) {
+			s += "0";
+		}
+
+		return s;
+	}
+
+	public void startCalculation() {
+		calculationRunning = true;
+		Thread t = new Thread() {
+			public void run() {
+				while(calculationRunning) {
+					for(Point p : grid.queue) {
+						grid.jump(p);
+					}
+				}
+			}
+		};
+		t.start();
+	}
+	
+	public void stopCalculation(){
+		calculationRunning = false;
+	}
+	
+	public void rearrangeGridQueue() {
+		if(grid != null) {
+			int x, y; //future coordinates of elements
+			Point temp;
+			
+			for(int i = 0; i < grid.queue.size(); i++) {
+				x = grid.random.nextInt(grid.queue.size());
+				y = grid.random.nextInt(grid.queue.size());
+				
+				temp = grid.queue.get(x);
+				grid.queue.set(x, grid.queue.get(y));
+				grid.queue.set(x, temp);
+			}
+		}
+	}
+	
+	
+
+
+	@Override
+	public void paint(Graphics2D g) {
+		g.fillRect(0, 0, 100, 100);
+		
+	}
+	
+}

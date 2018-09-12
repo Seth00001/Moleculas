@@ -1,0 +1,7 @@
+package engine;
+
+import java.awt.Graphics2D;
+
+public interface IPaintable {
+	public void Paint(Graphics2D g);
+}
