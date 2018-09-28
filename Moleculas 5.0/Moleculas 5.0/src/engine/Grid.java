@@ -110,6 +110,13 @@ public class Grid {
 		}
 	}
 	
+	public void setPointUnchecked(int i, int j, int k) {
+		if(isValid(i, j, k)) {
+			grid[i][j][k] = true;
+			//queue.add(new Point(i, j, k));
+		}
+	}
+	
 	public int getNeirbourghsCount(int x, int y, int z) {
 		int count = 0;
 		
@@ -239,10 +246,33 @@ public class Grid {
 	}
 	
 	//endregion
+	 
+	public void refillTopRegion(double probability) {
+		for(int i = 0; i < dimX; i++) {
+			for(int j = 0; j < dimY; j++) {
+				for(int k = dimZ * 4 / 5; k < dimZ; k++) {
+					if(!grid[i][j][k] && random.nextDouble() < probability) {
+						setPoint(i, j, k);
+					}
+				}
+			}
+		}
+	}
 	
-	
-	
-	
-	
+	public double probab() {
+		double count = 0;
+		double volume = (int) (dimX * dimY * dimZ * 0.2);
+		
+		for(int i = 0; i < dimX; i++) {
+			for(int j = 0; j < dimY; j++) {
+				for(int k = dimZ * 4 / 5; k < dimZ; k++) {
+					if(grid[i][j][k]) {
+						count++;
+					}
+				}
+			}
+		}
+		return 0.00009625 - count / volume;
+	}
 	
 }

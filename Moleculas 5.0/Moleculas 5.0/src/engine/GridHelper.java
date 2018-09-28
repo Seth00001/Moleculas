@@ -68,6 +68,9 @@ public class GridHelper implements IPaintable{
 				while(calculationRunning) {
 					synchronized(grid.grid) {	
 						
+//						System.out.println(grid.probab());
+						
+						grid.refillTopRegion(grid.probab());
 						
 						for(int i = 0; i < grid.queue.size(); i++) {
 							grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));

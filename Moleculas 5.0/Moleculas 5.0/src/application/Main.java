@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(400, 400, 400);
+		Grid grid = new Grid(100, 100, 50);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
@@ -19,9 +19,13 @@ public class Main {
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				for(int k = 0; k < grid.dimZ; k++) {
-					if((i - po.x) * (i - po.x) + (j - po.y) * (j - po.y) + (k - po.z)*(k - po.z) <= radius*radius) {
+					if(
+						k == 0
+						//(i - po.x) * (i - po.x) + (j - po.y) * (j - po.y) + (k - po.z)*(k - po.z) <= radius*radius) //sphere
+					){
 					//if(i < 10 && j < 10 && k < 10) {
-						grid.setPoint(i, j, k);
+						grid.setPointUnchecked(i, j, k);
+						
 					}
 				}
 			}
