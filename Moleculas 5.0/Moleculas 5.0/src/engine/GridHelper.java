@@ -63,14 +63,19 @@ public class GridHelper implements IPaintable{
 		calculationRunning = true;
 		Thread t = new Thread() {
 			public void run() {
+				grid.rearrange();
+				
 				while(calculationRunning) {
 					synchronized(grid.grid) {	
-						for(Point p : grid.queue) {
-							grid.jump(p);
+						
+						
+						for(int i = 0; i < grid.queue.size(); i++) {
+							grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
 //							System.out.println("Hop!");
+						
 						}
 					}
-					grid.rearrange();
+					//
 				}
 			}
 		};

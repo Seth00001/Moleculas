@@ -16,7 +16,7 @@ public class Grid {
 	
 	
 	public double alpha = 2; 
-	public double p0 = 0.6;
+	public double p0 = 0.685;
 	
 	//#endregion
 	
@@ -136,7 +136,8 @@ public class Grid {
 					
 					if(isValid(x + i, y + j, z + k)
 							&& !(i == 0 && j == 0 && k == 0)
-							&& !grid[x + i][y + j][z + k]) {
+							&& !grid[x + i][y + j][z + k]
+							) {
 						data.add(new PositionData(x + i, y + j, z + k, 
 								Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k) - 1))
 								));
@@ -158,7 +159,8 @@ public class Grid {
 				for(int  k = -1; k <= 1; k++) {
 
 					if(isValid(x + i, y + j, z + k)
-							&& !grid[x + i][y + j][z + k]) {
+							&& !grid[x + i][y + j][z + k]
+							) {
 						data.add(new PositionData(x + i, y + j, z + k, 
 								1
 								));
@@ -211,9 +213,12 @@ public class Grid {
 	
 	public void jump(Point p) {
 		int count = getNeirbourghsCount(p.x, p.y, p.z);
-		if( count < 4 && random.nextDouble() < Math.pow(p0, count * 1.1)/*Math.exp(-1 * p0 * count) */) {
+		if( count < 4 && random.nextDouble() < Math.pow(p0, count)/*Math.exp(-1 * p0 * count) */) {
 			PositionData data = getNextPosition(p.x, p.y, p.z);
-			move(p, data.x, data.y, data.z);
+			if(!grid[data.x][data.y][data.z]) {
+				move(p, data.x, data.y, data.z);	
+			}
+			
 		}
 	}
 	
