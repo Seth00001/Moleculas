@@ -100,6 +100,7 @@ public class Grid {
 		return(
 				(x >= 0 && y >= 0 && z >= 0 && x < dimX && y < dimY && z < dimZ)
 				&& validationPattern[x % 4][y % 4][z % 4]
+				//&& (x - dimX*0.5)*(x - dimX*0.5) + (y - dimY*0.5)*(y - dimY*0.5) < dimX*dimX * 0.25
 			);
 	}
 	
@@ -272,7 +273,7 @@ public class Grid {
 				}
 			}
 		}
-		return 0.00009625 - count / volume;
+		return 0.00009625/0.02 - count / volume;
 	}
 	
 }

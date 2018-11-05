@@ -8,11 +8,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(100, 100, 50);
+		Grid grid = new Grid(100, 100, 20);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
-		Point po = new Point(200, 200, 200);
+		Point po = new Point(100, 100, 200);
 		double radius = 60;
 		
 		
