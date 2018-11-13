@@ -252,7 +252,7 @@ public class Grid {
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
 				for(int k = dimZ * 4 / 5; k < dimZ; k++) {
-					if(!grid[i][j][k] && random.nextDouble() < probability) {
+					if(isValid(i, j, k) && !grid[i][j][k] && random.nextDouble() < probability) {
 						setPoint(i, j, k);
 					}
 				}
@@ -262,7 +262,8 @@ public class Grid {
 	
 	public double probab() {
 		double count = 0;
-		double volume = (int) (dimX * dimY * dimZ * 0.2);
+		double volume = 0;//(int) (dimX * dimY * dimZ * 0.2);
+		
 		
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
@@ -270,10 +271,16 @@ public class Grid {
 					if(grid[i][j][k]) {
 						count++;
 					}
+					if(isValid(i, j, k)) {
+						volume++;
+					}
 				}
 			}
 		}
-		return 0.00009625/0.02 - count / volume;
+
+//		System.out.println(count + " / " + volume + " count/volume");
+		
+		return 0.00028 * 2.8 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
 	}
 	
 }

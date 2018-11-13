@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 import Helpers.Point;
 
@@ -27,22 +28,23 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
-		
-		synchronized(grid.grid) {
-			for(Point p : grid.queue) {
-				
-				if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) {
-					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+		synchronized(grid) {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
+			
+			synchronized(grid.grid) {
+				for(Point p : grid.queue) {
+					
+					if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
+					{
+						writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+					}
+					
 				}
-				
 			}
+			
+			writer.flush();
+			writer.close();
 		}
-		
-		
-		writer.flush();
-		writer.close();
 	}
 	
 	public String form(int number) {
@@ -78,7 +80,7 @@ public class GridHelper implements IPaintable{
 							System.out.println(step + "   " + grid.queue.size());
 						}
 						
-						grid.refillTopRegion(grid.probab());
+						grid.refillTopRegion(probab);
 						
 						for(int j = 0; j < 100; j++)
 						for(int i = 0; i < grid.queue.size(); i++) {
@@ -89,6 +91,9 @@ public class GridHelper implements IPaintable{
 						step += 100;
 					}
 					//
+					
+					
+					
 				}
 			}
 		};
