@@ -248,11 +248,16 @@ public class Grid {
 	
 	//endregion
 	 
+	public boolean isTopRegion(int i, int j, int k) {
+		
+		return k > dimZ* 0.75;
+	}
+	
 	public void refillTopRegion(double probability) {
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
-				for(int k = dimZ * 4 / 5; k < dimZ; k++) {
-					if(isValid(i, j, k) && !grid[i][j][k] && random.nextDouble() < probability) {
+				for(int k = 0; k < dimZ; k++) {
+					if(isValid(i, j, k) && isTopRegion(i, j, k) && !grid[i][j][k] && random.nextDouble() < probability) {
 						setPoint(i, j, k);
 					}
 				}
@@ -267,20 +272,23 @@ public class Grid {
 		
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
-				for(int k = dimZ * 4 / 5; k < dimZ; k++) {
-					if(grid[i][j][k]) {
-						count++;
-					}
-					if(isValid(i, j, k)) {
-						volume++;
+				for(int k = 0; k < dimZ; k++) {
+					if(isTopRegion(i, j, k)) {
+						if(grid[i][j][k]) {
+							count++;
+						}
+						if(isValid(i, j, k)) {
+							volume++;
+						}
 					}
 				}
 			}
 		}
 
-//		System.out.println(count + " / " + volume + " count/volume");
+		//System.out.println(count + " / " + volume + " count/volume");
 		
-		return 0.00028 * 2.8 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
+		return 0.001077 * 7.8 - count / volume;
+//;//0.00128 * 4.0 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
 	}
 	
 }

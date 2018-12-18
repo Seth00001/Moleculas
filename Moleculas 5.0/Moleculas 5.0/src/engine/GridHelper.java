@@ -34,7 +34,7 @@ public class GridHelper implements IPaintable{
 			synchronized(grid.grid) {
 				for(Point p : grid.queue) {
 					
-					if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
+					//if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
 					{
 						writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 					}

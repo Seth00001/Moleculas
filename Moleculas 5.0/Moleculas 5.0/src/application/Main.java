@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(500, 500, 500);
+		Grid grid = new Grid(500, 500, 40);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
@@ -22,11 +22,15 @@ public class Main {
 				for(int k = 0; k < grid.dimZ; k++) {
 					if(
 						k == 0
-					){
+					)
+					{
 						grid.setPointUnchecked(i, j, k);
 						
 					}
-					//grid.setPoint(i, j, k);
+//					if(k >= 1 && k <= 5) {
+//						grid.setPoint(i, j, k);
+//					}
+					
 				}
 			}
 		}
