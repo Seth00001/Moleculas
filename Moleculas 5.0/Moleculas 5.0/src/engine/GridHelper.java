@@ -143,7 +143,7 @@ public class GridHelper implements IPaintable{
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				
-				if(grid.grid[i][j][currentlyPaintedPlane]) {
+				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
 //					g.setColor(Color.BLUE);
 					g.fillRect( ( i) * halfSize, (  j) * halfSize, 2 * halfSize, 2 * halfSize);
 				}

@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(500, 500, 40);
+		Grid grid = new Grid(100, 100, 100);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
