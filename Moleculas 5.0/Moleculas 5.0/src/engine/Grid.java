@@ -7,7 +7,7 @@ import Helpers.Point;
 
 public class Grid {
 	
-	public boolean[][][] grid; 
+	public byte[][][] grid; 
 	public ArrayList<Point> queue;
 	public Random random;
 	public int dimX, dimY, dimZ;
@@ -30,6 +30,11 @@ public class Grid {
 	
 	//#endregion
 	
+	//bounded = 10
+	//unbound = 1
+	//absent = 0
+	//plane = 127
+//	public boolean globalHandle;
 	
 	public Grid() {
 		this(100, 100, 100);
@@ -75,7 +80,7 @@ public class Grid {
 		validationPattern[2][2][4] = true;
 		
 				
-		grid = new boolean[dimX][dimY][dimZ];
+		grid = new byte[dimX][dimY][dimZ];
 		queue = new ArrayList<Point>();
 		random = new Random();
 	}
@@ -106,14 +111,14 @@ public class Grid {
 	
 	public void setPoint(int i, int j, int k) {
 		if(isValid(i, j, k)) {
-			grid[i][j][k] = true;
+			grid[i][j][k] = 1;
 			queue.add(new Point(i, j, k));
 		}
 	}
 	
 	public void setPointUnchecked(int i, int j, int k) {
 		if(isValid(i, j, k)) {
-			grid[i][j][k] = true;
+			grid[i][j][k] = 127;
 			//queue.add(new Point(i, j, k));
 		}
 	}
@@ -126,7 +131,7 @@ public class Grid {
 				for(int  k = -1; k <= 1; k++) {
 					if(isValid(x + i, y + j, z + k)
 							&& (i != 0 && j != 0 && k != 0)
-							&& grid[x + i][y + j][z + k]) {
+							&& grid[x + i][y + j][z + k] > 9) {
 						count++;
 					}
 				}
@@ -134,6 +139,43 @@ public class Grid {
 		}
 		return count;
 	}
+	
+	public boolean hasBoundedNeirbourghs(int x, int y, int z) {
+		boolean has = false;
+		
+		for(int i = -1; i <= 1; i++ ) {
+			for(int j = -1; j <= 1; j++ ) {
+				for(int  k = -1; k <= 1; k++) {
+					if(isValid(x + i, y + j, z + k)
+							&& (i != 0 && j != 0 && k != 0)
+							&& grid[x + i][y + j][z + k] > 9) {
+						has = true;
+						break;
+					}
+				}
+			}
+		}
+		return has;
+	}
+	
+	/*public int getPositionWeight(int x, int y, int z) {
+		
+		int count = 0;
+		
+		for(int i = -1; i <= 1; i++ ) {
+			for(int j = -1; j <= 1; j++ ) {
+				for(int  k = -1; k <= 1; k++) {
+					if(isValid(x + i, y + j, z + k)
+							&& (i != 0 && j != 0 && k != 0)
+							&& grid[x + i][y + j][z + k] > 9
+							&& getNeirbourghsCount(x + i, y + j, z + k) > 0) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}*/
 	
 	public ArrayList<PositionData> getBoundedPositionData(int x, int y, int z){
 		ArrayList<PositionData> data = new ArrayList<PositionData>();
@@ -144,10 +186,10 @@ public class Grid {
 					
 					if(isValid(x + i, y + j, z + k)
 							&& !(i == 0 && j == 0 && k == 0)
-							&& !grid[x + i][y + j][z + k]
+							&& grid[x + i][y + j][z + k] == 0 
 							) {
 						data.add(new PositionData(x + i, y + j, z + k, 
-								Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k) - 1))
+								Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k)))
 								));
 					}
 				}
@@ -167,11 +209,13 @@ public class Grid {
 				for(int  k = -1; k <= 1; k++) {
 
 					if(isValid(x + i, y + j, z + k)
-							&& !grid[x + i][y + j][z + k]
+							&& grid[x + i][y + j][z + k] == 0
 							) {
+						
 						data.add(new PositionData(x + i, y + j, z + k, 
 								1
 								));
+
 					}
 				}
 			}
@@ -184,7 +228,7 @@ public class Grid {
 	
 	public PositionData getNextPosition(int x, int y, int z) {
 		ArrayList<PositionData> data;
-		if(getNeirbourghsCount(x, y, z) == 0) {
+		if( grid[x][y][z] < 10) {
 			data = getFreePositionData(x, y, z);
 		}
 		else {
@@ -212,8 +256,14 @@ public class Grid {
 
 	//from, where
 	public void move(Point p, int i, int j, int k) {
-		grid[p.x][p.y][p.z] = false;
-		grid[i][j][k] = true;
+		boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
+		if(!globalHandle || isTopRegion(i, j, k)) {
+			grid[i][j][k] = 1;
+		}
+		else {
+			grid[i][j][k] = 10;
+		}
+		grid[p.x][p.y][p.z] = 0;
 		p.x = i;
 		p.y = j;
 		p.z = k;
@@ -223,7 +273,7 @@ public class Grid {
 		int count = getNeirbourghsCount(p.x, p.y, p.z);
 		if( count < 4 && random.nextDouble() < Math.pow(p0, count)/*Math.exp(-1 * p0 * count) */) {
 			PositionData data = getNextPosition(p.x, p.y, p.z);
-			if(!grid[data.x][data.y][data.z]) {
+			if(grid[data.x][data.y][data.z] == 0) {
 				move(p, data.x, data.y, data.z);	
 			}
 			
@@ -257,7 +307,7 @@ public class Grid {
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
 				for(int k = 0; k < dimZ; k++) {
-					if(isValid(i, j, k) && isTopRegion(i, j, k) && !grid[i][j][k] && random.nextDouble() < probability) {
+					if(isValid(i, j, k) && isTopRegion(i, j, k) && grid[i][j][k] == 0 && random.nextDouble() < probability) {
 						setPoint(i, j, k);
 					}
 				}
@@ -269,12 +319,12 @@ public class Grid {
 		double count = 0;
 		double volume = 0;//(int) (dimX * dimY * dimZ * 0.2);
 		
-		
+	
 		for(int i = 0; i < dimX; i++) {
 			for(int j = 0; j < dimY; j++) {
 				for(int k = 0; k < dimZ; k++) {
 					if(isTopRegion(i, j, k)) {
-						if(grid[i][j][k]) {
+						if(grid[i][j][k] != 0) {
 							count++;
 						}
 						if(isValid(i, j, k)) {
@@ -286,8 +336,8 @@ public class Grid {
 		}
 
 		//System.out.println(count + " / " + volume + " count/volume");
-		
-		return 0.001077 * 7.8 - count / volume;
+		//0.015508
+		return 0.001077 * 1.5 - count / volume;
 //;//0.00128 * 4.0 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
 	}
 	

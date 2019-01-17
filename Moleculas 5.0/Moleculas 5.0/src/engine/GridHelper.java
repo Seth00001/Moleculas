@@ -28,19 +28,19 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
-		synchronized(grid) {
+		synchronized(grid.grid) {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
 			
-			synchronized(grid.grid) {
-				for(Point p : grid.queue) {
-					
-					//if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
-					{
-						writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
-					}
-					
+			
+			for(Point p : grid.queue) {
+				
+				//if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
+				{
+					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 				}
+				
 			}
+			
 			
 			writer.flush();
 			writer.close();
@@ -71,7 +71,7 @@ public class GridHelper implements IPaintable{
 				double step = 0;
 				
 				while(calculationRunning) {
-					synchronized(grid.grid) {	
+					
 						
 //						
 						double probab = grid.probab();
@@ -84,13 +84,13 @@ public class GridHelper implements IPaintable{
 						
 						for(int j = 0; j < 100; j++)
 						for(int i = 0; i < grid.queue.size(); i++) {
-							grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
-//							System.out.println("Hop!");
-						
+							synchronized(grid.grid) {	
+								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+							}
 						}
 						step += 100;
-					}
-					//
+					
+					
 					
 					
 					
@@ -143,7 +143,7 @@ public class GridHelper implements IPaintable{
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				
-				if(grid.grid[i][j][currentlyPaintedPlane]) {
+				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
 //					g.setColor(Color.BLUE);
 					g.fillRect( ( i) * halfSize, (  j) * halfSize, 2 * halfSize, 2 * halfSize);
 				}

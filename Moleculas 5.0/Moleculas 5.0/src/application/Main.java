@@ -8,13 +8,17 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(500, 500, 40);
+		Grid grid = new Grid(200, 200, 200);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
 		Point po = new Point(100, 100, 200);
 		double radius = 60;
 		
+		//log
+		//326400.0   99827
+		//683800.0   323029
+		//
 		
 		
 		for(int i = 0; i < grid.dimX; i++) {
@@ -27,7 +31,13 @@ public class Main {
 						grid.setPointUnchecked(i, j, k);
 						
 					}
-//					if(k >= 1 && k <= 5) {
+//					if(
+//							i >= grid.dimX / 2 - 20 && i <= grid.dimX / 2 + 20
+//							&& j >= grid.dimY / 2 - 20 && j <= grid.dimY / 2 + 20
+//							&& k > 0 && k <= 30
+//							
+//							
+//					) {
 //						grid.setPoint(i, j, k);
 //					}
 					
