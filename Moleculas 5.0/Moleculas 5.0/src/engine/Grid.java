@@ -96,7 +96,7 @@ public class Grid {
 	
 	public void setPoint(int i, int j, int k) {
 		if(isValid(i, j, k)) {
-			grid[i][j][k] = 1;
+			grid[i][j][k] = 10;
 			queue.add(new Point(i, j, k));
 		}
 	}
@@ -121,7 +121,7 @@ public class Grid {
 					}
 				}
 			}
-		}
+		}		
 		return count;
 	}
 	
@@ -256,12 +256,11 @@ public class Grid {
 	
 	public void jump(Point p) {
 		int count = getNeirbourghsCount(p.x, p.y, p.z);
-		if( count < 4 && random.nextDouble() < Math.pow(p0, count)/*Math.exp(-1 * p0 * count) */) {
+		if( count < 8 && random.nextDouble() < Math.pow(p0, count)/*Math.exp(-1 * p0 * count) */) {
 			PositionData data = getNextPosition(p.x, p.y, p.z);
 			if(grid[data.x][data.y][data.z] == 0) {
 				move(p, data.x, data.y, data.z);	
 			}
-			
 		}
 	}
 	

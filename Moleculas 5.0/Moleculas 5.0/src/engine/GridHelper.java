@@ -70,6 +70,8 @@ public class GridHelper implements IPaintable{
 				double size = grid.queue.size();
 				double step = 0;
 				
+				
+				
 				while(calculationRunning) {
 					
 						if(size < grid.queue.size()) {
