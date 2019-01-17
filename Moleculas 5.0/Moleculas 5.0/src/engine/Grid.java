@@ -45,7 +45,7 @@ public class Grid {
 		dimY = DimY;
 		dimZ = DimZ;
 		
-		validationPattern = new boolean[5][5][5];
+		validationPattern = new boolean[3][3][3];
 		
 		for(int i = 0; i < validationPattern.length; i++) {
 			for(int j = 0; j < validationPattern[0].length; j++) {
@@ -56,30 +56,16 @@ public class Grid {
 		}
 		
 		validationPattern[0][0][0] = true;
-		validationPattern[0][0][4] = true;
-		validationPattern[0][4][0] = true;
-		validationPattern[4][0][0] = true;
-		validationPattern[0][4][4] = true;
-		validationPattern[4][0][4] = true;
-		validationPattern[4][4][0] = true;
-		validationPattern[4][4][4] = true;
-		
+		validationPattern[0][0][2] = true;
+		validationPattern[0][2][0] = true;
+		validationPattern[2][0][0] = true;
+		validationPattern[0][2][2] = true;
+		validationPattern[2][0][2] = true;
 		validationPattern[2][2][0] = true;
+		validationPattern[2][2][2] = true;
 		
 		validationPattern[1][1][1] = true;
-		validationPattern[3][3][1] = true;
-		
-		validationPattern[2][0][2] = true;
-		validationPattern[0][2][2] = true;
-		validationPattern[4][2][2] = true;
-		validationPattern[2][4][2] = true;
-
-		validationPattern[1][3][3] = true;
-		validationPattern[3][1][3] = true;
-		
-		validationPattern[2][2][4] = true;
-		
-				
+						
 		grid = new byte[dimX][dimY][dimZ];
 		queue = new ArrayList<Point>();
 		random = new Random();
@@ -104,8 +90,7 @@ public class Grid {
 	public boolean isValid(int x, int y, int z) {
 		return(
 				(x >= 0 && y >= 0 && z >= 0 && x < dimX && y < dimY && z < dimZ)
-				&& validationPattern[x % 4][y % 4][z % 4]
-				//&& (x - dimX*0.5)*(x - dimX*0.5) + (y - dimY*0.5)*(y - dimY*0.5) < dimX*dimX * 0.25
+				&& validationPattern[x % 2][y % 2][z % 2]
 			);
 	}
 	

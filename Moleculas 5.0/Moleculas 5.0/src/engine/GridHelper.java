@@ -72,15 +72,10 @@ public class GridHelper implements IPaintable{
 				
 				while(calculationRunning) {
 					
-						
-//						
-						double probab = grid.probab();
 						if(size < grid.queue.size()) {
 							size = grid.queue.size();
 							System.out.println(step + "   " + grid.queue.size());
 						}
-						
-						grid.refillTopRegion(probab);
 						
 						for(int j = 0; j < 100; j++)
 						for(int i = 0; i < grid.queue.size(); i++) {
@@ -89,10 +84,6 @@ public class GridHelper implements IPaintable{
 							}
 						}
 						step += 100;
-					
-					
-					
-					
 					
 				}
 			}
@@ -145,7 +136,7 @@ public class GridHelper implements IPaintable{
 				
 				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
 //					g.setColor(Color.BLUE);
-					g.fillRect( ( i) * halfSize, (  j) * halfSize, 2 * halfSize, 2 * halfSize);
+					g.fillRect( ( i) * halfSize, (  j) * halfSize, 1 * halfSize, 1 * halfSize);
 				}
 				else {
 //					g.setColor(Color.GRAY);
