@@ -68,11 +68,12 @@ public class InitialConditionProvider {
 				for(int k = 0; k < grid.dimZ / sphereDsitance; k++) {
 					
 					if(validationPattern[i % 4][j % 4][k % 4] 
-						&& i > 0 && i < grid.dimX - 2*sphereRadius - sphereDsitance
-						&& j > 0 && j < grid.dimY - 2*sphereRadius - sphereDsitance
-						&& k > 0 && k < grid.dimZ - 2*sphereRadius - sphereDsitance
-						){
-						centers.add(new DPoint((i + 0.5)*sphereDsitance, (j + 0.5)*sphereDsitance, (k + 0.5)*sphereDsitance));
+						&& i*sphereDsitance > 0 && i*sphereDsitance < grid.dimX - 2 * sphereRadius - sphereDsitance
+						&& j*sphereDsitance > 0 && j*sphereDsitance < grid.dimY - 2 * sphereRadius - sphereDsitance
+						&& k*sphereDsitance > 0 && k*sphereDsitance < grid.dimZ - 2 * sphereRadius - sphereDsitance
+					)
+					{
+							centers.add(new DPoint((i + 0.5)*sphereDsitance, (j + 0.5)*sphereDsitance, (k + 0.5)*sphereDsitance));
 					}
 
 				}
