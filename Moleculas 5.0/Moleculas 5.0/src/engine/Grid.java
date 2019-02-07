@@ -213,12 +213,12 @@ public class Grid {
 	
 	public PositionData getNextPosition(int x, int y, int z) {
 		ArrayList<PositionData> data;
-		if( grid[x][y][z] < 10) {
-			data = getFreePositionData(x, y, z);
-		}
-		else {
+//		if( grid[x][y][z] < 10) {
+//			data = getFreePositionData(x, y, z);
+//		}
+//		else {
 			data = getBoundedPositionData(x, y, z);
-		}
+//		}
 		
 		double amplitude = 0;
 		
@@ -241,6 +241,7 @@ public class Grid {
 
 	//from, where
 	public void move(Point p, int i, int j, int k) {
+		grid[p.x][p.y][p.z] = 0;
 		boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
 		if(!globalHandle || isTopRegion(i, j, k)) {
 			grid[i][j][k] = 1;
@@ -248,7 +249,7 @@ public class Grid {
 		else {
 			grid[i][j][k] = 10;
 		}
-		grid[p.x][p.y][p.z] = 0;
+		
 		p.x = i;
 		p.y = j;
 		p.z = k;

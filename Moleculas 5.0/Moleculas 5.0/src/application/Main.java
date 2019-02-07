@@ -12,8 +12,9 @@ public class Main {
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
-		
-		InitialConditionProvider conditionProvider = new InitialConditionProvider(15, 17);
+//		r~5a; d ~1.5a;
+//		a = 2
+		InitialConditionProvider conditionProvider = new InitialConditionProvider(10, 13);
 		conditionProvider.setupEnvironment(grid);
 		
 //		for(int i = 0; i < grid.dimX ; i++) {
