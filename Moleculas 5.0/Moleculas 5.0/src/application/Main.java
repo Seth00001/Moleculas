@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(200, 200, 200);
+		Grid grid = new Grid(200, 200, 400);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
@@ -34,13 +34,13 @@ public class Main {
 //					if(
 //							i >= grid.dimX / 2 - 20 && i <= grid.dimX / 2 + 20
 //							&& j >= grid.dimY / 2 - 20 && j <= grid.dimY / 2 + 20
-//							&& k > 0 && k <= 30
+//							&& k > 0 && k <= 20
 //							
 //							
 //					) {
 //						grid.setPoint(i, j, k);
 //					}
-					
+//					
 				}
 			}
 		}

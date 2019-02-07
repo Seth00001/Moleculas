@@ -11,7 +11,7 @@ public class Grid {
 	public ArrayList<Point> queue;
 	public Random random;
 	public int dimX, dimY, dimZ;
-	
+	public double concentration;
 	//#region environment parameters
 	
 	
@@ -26,15 +26,11 @@ public class Grid {
 	
 	//#region optimization garbage section
 	
-//	private Point isValidTempPoint;
+	private int neirbourghsCountResult;
+	private PositionData collectedPositionData;
 	
-	//#endregion
 	
-	//bounded = 10
-	//unbound = 1
-	//absent = 0
-	//plane = 127
-//	public boolean globalHandle;
+	//#endregion optimization garbage section
 	
 	public Grid() {
 		this(100, 100, 100);
@@ -83,6 +79,10 @@ public class Grid {
 		grid = new byte[dimX][dimY][dimZ];
 		queue = new ArrayList<Point>();
 		random = new Random();
+		
+		concentration = 0.001077 / 4;
+	
+		
 	}
 	
 	public void setAlpha(double value) {
@@ -124,7 +124,8 @@ public class Grid {
 	}
 	
 	public int getNeirbourghsCount(int x, int y, int z) {
-		int count = 0;
+//		int count = 0;
+		neirbourghsCountResult = 0;
 		
 		for(int i = -1; i <= 1; i++ ) {
 			for(int j = -1; j <= 1; j++ ) {
@@ -132,12 +133,14 @@ public class Grid {
 					if(isValid(x + i, y + j, z + k)
 							&& (i != 0 && j != 0 && k != 0)
 							&& grid[x + i][y + j][z + k] > 9) {
-						count++;
+//						count++;
+						neirbourghsCountResult++;
 					}
 				}
 			}
 		}
-		return count;
+//		return count;
+		return neirbourghsCountResult;
 	}
 	
 	public boolean hasBoundedNeirbourghs(int x, int y, int z) {
@@ -228,12 +231,24 @@ public class Grid {
 	
 	public PositionData getNextPosition(int x, int y, int z) {
 		ArrayList<PositionData> data;
-		if( grid[x][y][z] < 10) {
-			data = getFreePositionData(x, y, z);
-		}
-		else {
+//		if( grid[x][y][z] < 10 ) {
+//			data = getFreePositionData(x, y, z);
+//		}
+//		else {
+//			data = getBoundedPositionData(x, y, z);
+//		}
+		
+		//if( grid[x][y][z] > 9 || hasBoundedNeirbourghs(x, y, z)) 
+		{
 			data = getBoundedPositionData(x, y, z);
+			
 		}
+//		else 
+//		{
+//			data = getFreePositionData(x, y, z);
+//		}
+		
+		
 		
 		double amplitude = 0;
 		
@@ -256,7 +271,22 @@ public class Grid {
 
 	//from, where
 	public void move(Point p, int i, int j, int k) {
+		
+		grid[p.x][p.y][p.z] = 0;
 		boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
+		if(!globalHandle || isTopRegion(i, j, k)) {
+			grid[i][j][k] = 1;
+		}
+		else {
+			grid[i][j][k] = 10;
+		}
+		
+		p.x = i;
+		p.y = j;
+		p.z = k;
+		
+		
+		/*boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
 		if(!globalHandle || isTopRegion(i, j, k)) {
 			grid[i][j][k] = 1;
 		}
@@ -266,7 +296,7 @@ public class Grid {
 		grid[p.x][p.y][p.z] = 0;
 		p.x = i;
 		p.y = j;
-		p.z = k;
+		p.z = k;*/
 	}
 	
 	public void jump(Point p) {
@@ -337,7 +367,7 @@ public class Grid {
 
 		//System.out.println(count + " / " + volume + " count/volume");
 		//0.015508
-		return 0.001077 * 1.5 - count / volume;
+		return concentration - count / volume;
 //;//0.00128 * 4.0 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
 	}
 	

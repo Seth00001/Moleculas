@@ -13,6 +13,7 @@ public class GridHelper implements IPaintable{
 
 	public Grid grid;
 	public boolean calculationRunning;  
+	public boolean snapshotsCreating;
 	
 	//#region paint settings
 	
@@ -28,19 +29,25 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
+		exportForVMD("fsds.pdb");
+	}
+	
+	public void exportForVMD(String path) throws IOException {
 		synchronized(grid.grid) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 			
 			
 			for(Point p : grid.queue) {
 				
-				//if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
+				if(/*grid.getNeirbourghsCount(p.x, p.y, p.z) > 9)*/grid.grid[p.x][p.y] [p.z] > 9) 
 				{
 					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 				}
-				
+				else
+				{
+					writer.write("ATOM    100  B   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+				}
 			}
-			
 			
 			writer.flush();
 			writer.close();
@@ -70,30 +77,93 @@ public class GridHelper implements IPaintable{
 				double size = grid.queue.size();
 				double step = 0;
 				
-				while(calculationRunning) {
+				long time;
+				long nanoTime;
+				
+				for(int n = 0; n < 40; n++) {
 					
+					
+					for(int j = 0; j < 100; j++)
+					{
+//						time = System.currentTimeMillis();
+//						nanoTime = System.nanoTime();
 						
-//						
 						double probab = grid.probab();
 						if(size < grid.queue.size()) {
 							size = grid.queue.size();
 							System.out.println(step + "   " + grid.queue.size());
 						}
-						
 						grid.refillTopRegion(probab);
 						
-						for(int j = 0; j < 100; j++)
-						for(int i = 0; i < grid.queue.size(); i++) {
-							synchronized(grid.grid) {	
-								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+						for(int k = 0; k < 1000; k++) 
+						{
+							for(int i = 0; i < grid.queue.size(); i++) {
+								synchronized(grid.grid) {	
+									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+								}
 							}
 						}
-						step += 100;
+							
+						step += 1000;
+						
+//						System.out.println(String.format("Steps done: %s;  Mils eloapsed: %s; Average ns spent: %s; ", 
+//								1000, 
+//								System.currentTimeMillis() - time, 
+//								(System.nanoTime() - nanoTime) / (grid.queue.size()*1000)
+//							
+//							));
+						
+					}	
+					try {
+						exportForVMD("Snapshots//" + step + "  " + grid.concentration + ".pdb");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}		
+			
+					
+				}
+				
+				grid.concentration = grid.concentration * 4 * 15;
+				
+				while(calculationRunning) {
+
 					
 					
+
 					
+					for(int j = 0; j < 100; j++)
+					{
+						double probab = grid.probab();
+						if(size < grid.queue.size()) {
+							size = grid.queue.size();
+							System.out.println(step + "   " + grid.queue.size());
+						}
+						grid.refillTopRegion(probab);
+						
+						for(int k = 0; k < 1000; k++) 
+						{
+							for(int i = 0; i < grid.queue.size(); i++) {
+								synchronized(grid.grid) {	
+									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+								}
+							}
+							
+						}
+							
+						step += 1000;
+						
+					}	
 					
+					try {
+						exportForVMD("Snapshots//" + step + "  " + grid.concentration + ".pdb");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}		
 					
+			
+
 				}
 			}
 		};
@@ -102,6 +172,14 @@ public class GridHelper implements IPaintable{
 	
 	public void stopCalculation(){
 		calculationRunning = false;
+	}
+	
+	public void beginExporting() {
+		snapshotsCreating = true;
+	}
+	
+	public void endExporting() {
+		snapshotsCreating = false;
 	}
 	
 	public void rearrangeGridQueue() {

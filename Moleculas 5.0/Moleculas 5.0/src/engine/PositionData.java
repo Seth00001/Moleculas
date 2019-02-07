@@ -28,4 +28,11 @@ public class PositionData {
 		z = 0;
 		weight = 0;
 	}
+	
+	public void setValue(int x, int y, int z, double weight) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.weight = weight;
+	}
 }
