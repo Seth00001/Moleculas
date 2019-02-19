@@ -24,7 +24,8 @@ public class InitialConditionProvider {
 				}
 			}
 		}
-		
+		//hex grid interpretation
+		/*
 		validationPattern[0][0][0] = true;
 		validationPattern[0][0][4] = true;
 		validationPattern[0][4][0] = true;
@@ -48,6 +49,61 @@ public class InitialConditionProvider {
 		validationPattern[3][1][3] = true;
 		
 		validationPattern[2][2][4] = true;
+		*/
+		
+		
+		//square grid interpretation
+		validationPattern[0][0][0] = true;
+		
+		validationPattern[2][0][0] = true;
+		validationPattern[0][2][0] = true;
+		validationPattern[0][0][2] = true;
+		
+		validationPattern[2][2][2] = true;
+		
+		validationPattern[0][2][2] = true;
+		validationPattern[2][0][2] = true;
+		validationPattern[2][2][0] = true;
+		
+		validationPattern[4][0][0] = true;
+		validationPattern[0][4][0] = true;
+		validationPattern[0][0][4] = true;
+		
+		validationPattern[0][4][4] = true;
+		validationPattern[4][0][4] = true;
+		validationPattern[4][4][0] = true;
+		
+		validationPattern[4][2][0] = true;
+		validationPattern[4][0][2] = true;
+		
+		validationPattern[2][4][0] = true;
+		validationPattern[2][0][4] = true;
+		
+		validationPattern[0][2][4] = true;
+		validationPattern[0][4][2] = true;
+		
+		validationPattern[4][2][2] = true;
+		
+		validationPattern[4][4][2] = true;
+		validationPattern[4][2][4] = true;
+		validationPattern[2][4][4] = true;
+		
+		validationPattern[4][4][4] = true;
+		
+		
+		validationPattern[1][1][1] = true;
+		
+		validationPattern[3][3][3] = true;
+		
+		validationPattern[3][1][1] = true;
+		validationPattern[1][3][1] = true;
+		validationPattern[1][1][3] = true;
+		
+		validationPattern[3][3][1] = true;
+		validationPattern[3][1][3] = true;
+		validationPattern[1][3][3] = true;
+		
+		
 	}
 	
 	public InitialConditionProvider(int radius, int distance) {

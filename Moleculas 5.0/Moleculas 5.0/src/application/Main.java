@@ -8,13 +8,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Grid grid = new Grid(200, 200, 200);
+		Grid grid = new Grid(200, 200, 100);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
 //		r~5a; d ~1.5a;
 //		a = 2
-		InitialConditionProvider conditionProvider = new InitialConditionProvider(10, 13);
+		InitialConditionProvider conditionProvider = new InitialConditionProvider(10, 12);
 		conditionProvider.setupEnvironment(grid);
 		
 //		for(int i = 0; i < grid.dimX ; i++) {
