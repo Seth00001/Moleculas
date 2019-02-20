@@ -3,11 +3,13 @@ package engine;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
 import Helpers.Point;
+import application.Logger;
 
 public class GridHelper implements IPaintable{
 
@@ -33,8 +35,7 @@ public class GridHelper implements IPaintable{
 	
 	public void exportForVMD(String path) throws IOException {
 		synchronized(grid.grid) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-			
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(Logger.INSTANCE.getSession(),path)));
 			
 			for(Point p : grid.queue) {
 				
@@ -90,8 +91,8 @@ public class GridHelper implements IPaintable{
 							}
 						}
 						step += 1000;
-					
-						System.out.println(String.format("Steps done: %s", step));
+
+						Logger.INSTANCE.write(String.format("Steps done: %s", step));
 						
 						try {
 							exportForVMD(String.format("Snapshots\\snapshot_%s.pdb", step));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Helpers.Point;
+import application.Logger;
 
 public class Grid {
 	
@@ -75,8 +76,8 @@ public class Grid {
 		alpha = value;
 		double ep0 = Math.pow(Math.E, alpha);
 		p0 = Math.pow(0.685, alpha); // 0.685
-		
-		System.out.println(String .format("alpha: %s; p0: %s", alpha, p0));
+
+		Logger.INSTANCE.write(String .format("alpha: %s; p0: %s", alpha, p0));
 		
 	}
 	

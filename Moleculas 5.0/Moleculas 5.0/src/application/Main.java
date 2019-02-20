@@ -1,14 +1,12 @@
 package application;
 
-import Helpers.DPoint;
-import Helpers.Point;
 import engine.*;
 
 public class Main {
 
 	public static void main(String[] args) {
-		
-		Grid grid = new Grid(200, 200, 200);
+		Logger.INSTANCE.startLog();
+		Grid grid = new Grid(200, 200, 60);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
