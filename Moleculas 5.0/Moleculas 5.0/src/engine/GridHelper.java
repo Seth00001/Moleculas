@@ -83,13 +83,13 @@ public class GridHelper implements IPaintable{
 							System.out.println(step + "   " + grid.queue.size());
 						}
 						
-						for(int j = 0; j < 10; j++)
+						for(int j = 0; j < 1000; j++)
 						for(int i = 0; i < grid.queue.size(); i++) {
 							synchronized(grid.grid) {	
 								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
 							}
 						}
-						step += 10;
+						step += 1000;
 					
 						System.out.println(String.format("Steps done: %s", step));
 						

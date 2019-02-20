@@ -285,7 +285,7 @@ public class Grid {
 	 
 	public boolean isTopRegion(int i, int j, int k) {
 		
-		return k > dimZ* 0.75;
+		return k > dimZ;
 	}
 	
 	public void refillTopRegion(double probability) {
