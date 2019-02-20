@@ -28,8 +28,12 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
+		exportForVMD("fsds.pdb");
+	}
+	
+	public void exportForVMD(String path) throws IOException {
 		synchronized(grid.grid) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 			
 			
 			for(Point p : grid.queue) {
@@ -79,14 +83,22 @@ public class GridHelper implements IPaintable{
 							System.out.println(step + "   " + grid.queue.size());
 						}
 						
-						for(int j = 0; j < 100; j++)
+						for(int j = 0; j < 10; j++)
 						for(int i = 0; i < grid.queue.size(); i++) {
 							synchronized(grid.grid) {	
 								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
 							}
 						}
-						step += 100;
+						step += 10;
 					
+						System.out.println(String.format("Steps done: %s", step));
+						
+						try {
+							exportForVMD(String.format("Snapshots\\snapshot_%s.pdb", step));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				}
 			}
 		};

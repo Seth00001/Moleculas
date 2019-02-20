@@ -8,7 +8,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Grid grid = new Grid(200, 200, 100);
+		Grid grid = new Grid(200, 200, 200);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
