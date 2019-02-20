@@ -35,7 +35,9 @@ public class GridHelper implements IPaintable{
 	
 	public void exportForVMD(String path) throws IOException {
 		synchronized(grid.grid) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(Logger.INSTANCE.getSession(),path)));
+			File file = new File(Logger.INSTANCE.getSession(),path);
+			file.createNewFile();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			
 			for(Point p : grid.queue) {
 				
@@ -95,7 +97,7 @@ public class GridHelper implements IPaintable{
 						Logger.INSTANCE.write(String.format("Steps done: %s", step));
 						
 						try {
-							exportForVMD(String.format("Snapshots\\snapshot_%s.pdb", step));
+							exportForVMD(String.format("snapshot_%s.pdb", step));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
