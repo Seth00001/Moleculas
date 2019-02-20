@@ -9,7 +9,7 @@ public enum Logger {
     INSTANCE;
     private File root, session, log;
     private String title;
-    private String ROOT_FOLDER = "EXPERIMENT_DAMPS";
+    private String ROOT_FOLDER = "EXPERIMENT_DUMPS";
 
     {
         title = getFolderTitle();
