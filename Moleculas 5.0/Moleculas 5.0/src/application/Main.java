@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Logger.INSTANCE.startLog();
-		Grid grid = new Grid(100, 100, 100);
+		Grid grid = new Grid(250, 250, 260);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		

@@ -116,6 +116,10 @@ public class InitialConditionProvider {
 	public void setupEnvironment(Grid grid) {
 		Point sector;
 		DPoint center;
+		double dx,dy,dz;
+		dx = grid.dimX - 2 * sphereRadius - sphereDsitance;
+		dy = grid.dimY - 2 * sphereRadius - sphereDsitance;
+		dz = grid.dimZ - 2 * sphereRadius - sphereDsitance;
 		
 		ArrayList<DPoint> centers = new ArrayList<DPoint>();
 		
@@ -124,9 +128,9 @@ public class InitialConditionProvider {
 				for(int k = 0; k < grid.dimZ / sphereDsitance; k++) {
 					
 					if(validationPattern[i % 4][j % 4][k % 4] 
-						&& i*sphereDsitance > 0 && i*sphereDsitance < grid.dimX - 2 * sphereRadius - sphereDsitance
-						&& j*sphereDsitance > 0 && j*sphereDsitance < grid.dimY - 2 * sphereRadius - sphereDsitance
-						&& k*sphereDsitance > 0 && k*sphereDsitance < grid.dimZ - 2 * sphereRadius - sphereDsitance
+						&& i*sphereDsitance > 0 && i*sphereDsitance < dx
+						&& j*sphereDsitance > 0 && j*sphereDsitance < dy
+						&& k*sphereDsitance > 0 && k*sphereDsitance < dz
 					)
 					{
 							centers.add(new DPoint((i + 0.5)*sphereDsitance, (j + 0.5)*sphereDsitance, (k + 0.5)*sphereDsitance));
@@ -144,7 +148,7 @@ public class InitialConditionProvider {
 				for(int j = (int)(centers.get(n).y - sphereRadius); j < (int)(centers.get(n).y + sphereRadius); j++) {
 					for(int k = (int)(centers.get(n).z - sphereRadius); k < (int)(centers.get(n).z + sphereRadius); k++) {
 						
-						sector = new Point(((i - sphereDsitance/2)/sphereDsitance), ((j - sphereDsitance/2)/sphereDsitance), ((k - sphereDsitance / 2)/sphereDsitance));
+						//sector = new Point(((i - sphereDsitance/2)/sphereDsitance), ((j - sphereDsitance/2)/sphereDsitance), ((k - sphereDsitance / 2)/sphereDsitance));
 						
 						center = centers.get(n);
 						

@@ -127,7 +127,7 @@ public class Grid {
 	}
 	
 	public boolean hasBoundedNeirbourghs(int x, int y, int z) {
-		boolean has = false;
+		//boolean has = false;
 		
 		for(int i = -1; i <= 1; i++ ) {
 			for(int j = -1; j <= 1; j++ ) {
@@ -135,13 +135,14 @@ public class Grid {
 					if(isValid(x + i, y + j, z + k)
 							&& (i != 0 && j != 0 && k != 0)
 							&& grid[x + i][y + j][z + k] > 9) {
-						has = true;
-						break;
+						return true;
+						/*has = true;
+						break;*/
 					}
 				}
 			}
 		}
-		return has;
+		return false;
 	}
 	
 	/*public int getPositionWeight(int x, int y, int z) {
@@ -243,13 +244,13 @@ public class Grid {
 	//from, where
 	public void move(Point p, int i, int j, int k) {
 		grid[p.x][p.y][p.z] = 0;
-		boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
+		/*boolean globalHandle = hasBoundedNeirbourghs(i, j, k);
 		if(!globalHandle || isTopRegion(i, j, k)) {
 			grid[i][j][k] = 1;
-		}
-		else {
+		}else {
 			grid[i][j][k] = 10;
-		}
+		}*/
+		grid[i][j][k] = (byte) ((!hasBoundedNeirbourghs(i, j, k) || isTopRegion(i, j, k))?1:10);
 		
 		p.x = i;
 		p.y = j;
@@ -278,7 +279,7 @@ public class Grid {
 			queue.set(x, queue.get(y));
 			queue.set(y, temp);
 			
-			temp = null;
+			//temp = null;
 		}
 	}
 	
