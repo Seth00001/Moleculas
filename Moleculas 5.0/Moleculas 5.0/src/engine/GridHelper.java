@@ -35,7 +35,7 @@ public class GridHelper implements IPaintable{
 	
 	public void exportForVMD(String path) throws IOException {
 		synchronized(grid.grid) {
-			File file = new File(Logger.INSTANCE.getSession(),path);
+			File file = new File(/*Logger.INSTANCE.getSession(),*/path);
 			file.createNewFile();
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			

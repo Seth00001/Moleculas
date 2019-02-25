@@ -53,6 +53,7 @@ public class InitialConditionProvider {
 		
 		
 		//square grid interpretation
+		/*
 		validationPattern[0][0][0] = true;
 		
 		validationPattern[2][0][0] = true;
@@ -102,8 +103,61 @@ public class InitialConditionProvider {
 		validationPattern[3][3][1] = true;
 		validationPattern[3][1][3] = true;
 		validationPattern[1][3][3] = true;
+		*/
+		
+		/////////
+		validationPattern[0][0][0] = true;
+		validationPattern[2][0][0] = true;
+		validationPattern[4][0][0] = true;
+		
+		validationPattern[1][2][0] = true;
+		validationPattern[3][2][0] = true;
+		
+		validationPattern[4][0][0] = true;
+		validationPattern[4][2][0] = true;
+		validationPattern[4][4][0] = true;
+		
+		/////////
+		validationPattern[1][1][1] = true;
+		validationPattern[3][1][1] = true;
+		validationPattern[0][3][1] = true;
+		validationPattern[2][3][1] = true;
+		validationPattern[4][3][1] = true;
+		
+		/////////
+		validationPattern[0][0][2] = true;
+		validationPattern[2][0][2] = true;
+		validationPattern[4][0][2] = true;
+		
+		validationPattern[1][2][2] = true;
+		validationPattern[3][2][2] = true;
+		
+		validationPattern[4][0][2] = true;
+		validationPattern[4][2][2] = true;
+		validationPattern[4][4][2] = true;
+		
+		/////////
+		validationPattern[1][1][3] = true;
+		validationPattern[3][1][3] = true;
+		validationPattern[0][3][3] = true;
+		validationPattern[2][3][3] = true;
+		validationPattern[4][3][3] = true;
 		
 		
+		/////////
+		validationPattern[0][0][4] = true;
+		validationPattern[2][0][4] = true;
+		validationPattern[4][0][4] = true;
+		
+		validationPattern[1][2][4] = true;
+		validationPattern[3][2][4] = true;
+	
+		validationPattern[4][0][4] = true;
+		validationPattern[4][2][4] = true;
+		validationPattern[4][4][4] = true;
+	
+	
+	
 	}
 	
 	public InitialConditionProvider(int radius, int distance) {
@@ -133,7 +187,11 @@ public class InitialConditionProvider {
 						&& k*sphereDsitance > 0 && k*sphereDsitance < dz
 					)
 					{
-							centers.add(new DPoint((i + 0.5)*sphereDsitance, (j + 0.5)*sphereDsitance, (k + 0.5)*sphereDsitance));
+						DPoint p = GetOffset(i, j, k);
+							centers.add(new DPoint(
+									(i + 0.5)*sphereDsitance,
+									(j + 0.5)*sphereDsitance * 0.7,
+									(k + 0.5)*sphereDsitance));
 					}
 
 				}
@@ -167,5 +225,15 @@ public class InitialConditionProvider {
 		
 		
 	}	
+	
+	public DPoint GetOffset(int i, int j, int k) {
+		DPoint p = new DPoint(0, 0, 0);
+		
+		
+//		p.x += j%2 * (sphereDsitance/2);
+//		p.z += k%2 * (sphereDsitance);
+		
+		return p;
+	}
 	
 }
