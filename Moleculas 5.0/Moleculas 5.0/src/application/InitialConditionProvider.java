@@ -168,7 +168,7 @@ public class InitialConditionProvider {
 	}
 	
 	public void setupEnvironment(Grid grid) {
-		Point sector;
+
 		DPoint center;
 		double dx,dy,dz;
 		dx = grid.dimX - 2 * sphereRadius - sphereDsitance;
@@ -187,11 +187,18 @@ public class InitialConditionProvider {
 						&& k*sphereDsitance > 0 && k*sphereDsitance < dz
 					)
 					{
-						DPoint p = GetOffset(i, j, k);
+						if(k % 2 ==0 ) {
 							centers.add(new DPoint(
 									(i + 0.5)*sphereDsitance,
-									(j + 0.5)*sphereDsitance * 0.7,
+									(j + 0.5)*sphereDsitance * 0.866,
 									(k + 0.5)*sphereDsitance));
+						}
+						else {
+							centers.add(new DPoint(
+									(i + 0.5)*sphereDsitance,
+									((j + 0.5)*sphereDsitance - sphereRadius / 2) * 0.866,
+									(k + 0.5)*sphereDsitance));
+						}
 					}
 
 				}
@@ -225,15 +232,4 @@ public class InitialConditionProvider {
 		
 		
 	}	
-	
-	public DPoint GetOffset(int i, int j, int k) {
-		DPoint p = new DPoint(0, 0, 0);
-		
-		
-//		p.x += j%2 * (sphereDsitance/2);
-//		p.z += k%2 * (sphereDsitance);
-		
-		return p;
-	}
-	
 }
