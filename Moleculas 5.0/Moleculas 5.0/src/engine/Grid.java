@@ -1,6 +1,8 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 
 import Helpers.Point;
@@ -96,9 +98,11 @@ public class Grid {
 	}
 	
 	public void setPoint(int i, int j, int k) {
-		if(isValid(i, j, k)) {
+		if(isValid(i, j, k)
+			&& grid[i][j][k] == 0) 
+		{
 			grid[i][j][k] = 10;
-			queue.add(new Point(i, j, k));
+			queue.add( new Point(i, j, k));
 		}
 	}
 	
@@ -327,5 +331,94 @@ public class Grid {
 		return 0.001077 * 1.5 - count / volume;
 //;//0.00128 * 4.0 - count / volume;//0.00017657 - count / volume;//0.00009625 - count / volume;
 	}
+	
+	public ArrayList<ClusterData> CollectClusterData() {
+		ArrayList<ClusterData> data = new ArrayList<ClusterData>();
+		
+		System.out.println("Collecting data began");
+		
+		synchronized(grid)
+		{
+			
+			LinkedList<Point> particles = new LinkedList<Point>(this.queue);
+			byte[][][] volume = this.grid.clone();
+			
+			//normalizing the array
+			for(Point p : particles) {
+				volume[p.x][p.y][p.z] = 1;
+			}
+			
+			Point p;
+			
+			
+//			System.out.println(this.queue.size());
+//			System.out.println(particles.size());
+			
+			
+			
+			
+			while(true)
+			{
+				//collect data for 1 cluster
+				LinkedList<Point> q = new LinkedList<Point>();
+				
+				for(Point pp : particles) {
+					if(volume[pp.x][pp.y][pp.z] == 1) {
+						q.add(pp);
+					}
+				}
+				
+				if(q.size() == 0) break;
+				
+//				q.add(particles.get(0));
+				
+				for(int n = 0; n < q.size(); n++) 
+				{
+					p = q.get(n);
+//					System.out.println(String.format("%s  |  %s  |   <%s>", 
+//							q.size(), 
+//							isValid(p.x, p.y, p.z), 
+////							volume[p.x][p.y][p.z] == 1, 
+//							p.toString()));
+					if(n % 100 == 0) System.out.println(String.format("Current: %s    Queue: %s    Untouched: %s", n, q.size(), particles.size()));
+					
+					
+					if(isValid(p.x, p.y, p.z)) 
+					{
+						for(int i = -1; i <= 1; i++ ) {
+							for(int j = -1; j <= 1; j++ ) {
+								for(int  k = -1; k <= 1; k++) {
+									if(isValid(p.x + i, p.y + j, p.z + k)
+											&& volume[p.x + i][p.y + j][p.z + k] == 1) 
+									{
+										Point p1 = new Point(p.x + i, p.y + j, p.z + k);
+										
+										q.add(p1);
+//										particles.remove(p1);
+										
+										volume[p1.x][p1.y][p1.z] = 10;
+//										System.out.println("Added");
+									}
+								}
+							}
+						}		
+						
+						
+						
+						
+						n++;
+					}	
+				}
+				System.out.println("----------------------------");	
+				data.add(new ClusterData(new ArrayList<Point>(q)));
+			}
+			
+//			System.out.println(particles.size());	
+
+		}
+		
+		return data;
+	}
+	
 	
 }

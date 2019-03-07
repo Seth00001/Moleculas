@@ -1,12 +1,15 @@
 package application;
 
+import java.util.ArrayList;
+
+import Helpers.Point;
 import engine.*;
 
 public class Main {
 
 	public static void main(String[] args) {
 		Logger.INSTANCE.startLog();
-		Grid grid = new Grid(200, 200, 100);
+		Grid grid = new Grid(100, 100, 100);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
@@ -27,10 +30,28 @@ public class Main {
 		
 //		System.out.println(grid.getNeirbourghsCount(1, 1, 1));
 //		System.out.println(grid.grid[1][1][1]);
+
+		System.out.println(grid.queue.size());
+//		System.out.println(grid.CollectClusterData().size());
+		ArrayList<ClusterData> data = grid.CollectClusterData();
+		System.out.println(data.size());
+		
 		
 		MainWindow win = new MainWindow();
 		win.setHelper(helper);
 		win.setVisible(true);
+	
+//		ArrayList<Point> p = new ArrayList<Point>();
+//		
+//		Point p1 = new Point(1, 1, 1);
+//		Point p2 = new Point(1, 1, 1);
+//		
+//		p.add(p1);
+//		System.out.println(p.contains(p2));
+//		System.out.println(p1.equals(p2));
+//		System.out.println(p1.hashCode());
+//		System.out.println(p2.hashCode());
+		
 		
 	}
 

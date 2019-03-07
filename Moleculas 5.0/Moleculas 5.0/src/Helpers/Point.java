@@ -26,5 +26,19 @@ public class Point{
 		z = 0;
 	}
 	
+	@Override 
+	public boolean equals(Object o) {
+		return this.hashCode() == o.hashCode();
+	}
+	
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s | %s | %s", this.x, this.y, this.z);
+	}
 	
 }

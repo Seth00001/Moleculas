@@ -198,7 +198,7 @@ public class InitialConditionProvider {
 			}
 		}
 		
-		System.out.println(centers.size());
+//		System.out.println(centers.size());
 		
 		for(int n = 0; n < centers.size(); n++) {
 		

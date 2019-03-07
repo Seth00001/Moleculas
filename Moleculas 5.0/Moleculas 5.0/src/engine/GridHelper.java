@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import Helpers.Point;
@@ -86,15 +87,31 @@ public class GridHelper implements IPaintable{
 							System.out.println(step + "   " + grid.queue.size());
 						}
 						
-						for(int j = 0; j < 1000; j++)
-						for(int i = 0; i < grid.queue.size(); i++) {
-							synchronized(grid.grid) {	
-								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+						for(int j = 0; j < 1000; j++) {
+							for(int i = 0; i < grid.queue.size(); i++) {
+								synchronized(grid.grid) {	
+									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+								}
 							}
 						}
+						
+						
 						step += 1000;
 
 						Logger.INSTANCE.write(String.format("Steps done: %s", step));
+
+						
+						ArrayList<ClusterData> data = grid.CollectClusterData();
+						
+						Logger.INSTANCE.write(String.format("Clusters count: %s", data.size()));
+						for(ClusterData cd : data) 
+						{
+							Logger.INSTANCE.write(String.format("%s", cd.size()));
+						}
+						
+						Logger.INSTANCE.write("-------------------------------------");
+						
+						//
 						
 						try {
 							exportForVMD(String.format("snapshot_%s.pdb", step));
