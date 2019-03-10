@@ -335,7 +335,7 @@ public class Grid {
 	public ArrayList<ClusterData> CollectClusterData() {
 		ArrayList<ClusterData> data = new ArrayList<ClusterData>();
 		
-		System.out.println("Collecting data began");
+//		System.out.println("Collecting data began");
 		
 		synchronized(grid)
 		{
@@ -377,10 +377,11 @@ public class Grid {
 				
 				
 				if(q.size() == 0) break;
-				else if(q.size() == 1) System.out.println(String.format("%s    <%s>     ", 
-						getNeirbourghsCount(q.get(0).x,q.get(0).y, q.get(0).z),
-						q.get(0).toString() )
-						);
+//				else if(q.size() == 1) 
+//					System.out.println(String.format("%s    <%s>     ", 
+//						getNeirbourghsCount(q.get(0).x,q.get(0).y, q.get(0).z),
+//						q.get(0).toString() )
+//						);
 				
 				for(int n = 0; n < q.size(); n++) 
 				{
@@ -390,7 +391,7 @@ public class Grid {
 //							isValid(p.x, p.y, p.z), 
 ////							volume[p.x][p.y][p.z] == 1, 
 //							p.toString()));
-					if(n % 100 == 0) System.out.println(String.format("Current: %s    Queue: %s    Untouched: %s", n, q.size(), particles.size()));
+//					if(n % 100 == 0) System.out.println(String.format("Current: %s    Queue: %s    Untouched: %s", n, q.size(), particles.size()));
 					
 					
 					if(isValid(p.x, p.y, p.z)) 
@@ -415,7 +416,7 @@ public class Grid {
 //						n++;
 					}	
 				}
-				System.out.println("----------------------------   " + q.size());	
+//				System.out.println("----------------------------   " + q.size());	
 				data.add(new ClusterData(new ArrayList<Point>(q)));
 			}
 			

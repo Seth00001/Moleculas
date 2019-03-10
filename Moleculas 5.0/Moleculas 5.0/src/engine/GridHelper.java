@@ -87,7 +87,7 @@ public class GridHelper implements IPaintable{
 							System.out.println(step + "   " + grid.queue.size());
 						}
 						
-						for(int j = 0; j < 100; j++) {
+						for(int j = 0; j < 1000; j++) {
 							for(int i = 0; i < grid.queue.size(); i++) {
 								synchronized(grid.grid) {	
 									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
@@ -95,8 +95,7 @@ public class GridHelper implements IPaintable{
 							}
 						}
 						
-						
-						step += 100;
+						step += 1000;
 
 						Logger.INSTANCE.write(String.format("Steps done: %s", step));
 
@@ -104,12 +103,18 @@ public class GridHelper implements IPaintable{
 						ArrayList<ClusterData> data = grid.CollectClusterData();
 						
 						Logger.INSTANCE.write(String.format("Clusters count: %s", data.size()));
+						
+						StringBuilder builder = new StringBuilder("{");
+						
 						for(ClusterData cd : data) 
 						{
-							Logger.INSTANCE.write(String.format("%s", cd.size()));
+							builder.append(String.format("(%s)", cd.size()));
 						}
 						
-						Logger.INSTANCE.write("-------------------------------------");
+						builder.append("}");
+						Logger.INSTANCE.write(String.format("%s", builder.toString()));
+						
+//						Logger.INSTANCE.write("-------------------------------------");
 						
 						//
 						
