@@ -119,7 +119,7 @@ public class GridHelper implements IPaintable{
 						//
 						
 						try {
-							exportForVMD(String.format("snapshot_%s.pdb", step));
+							exportForVMD(String.format("Snapshots//snapshot_%s.pdb", step));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

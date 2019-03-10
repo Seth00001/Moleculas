@@ -9,7 +9,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Logger.INSTANCE.startLog();
-		Grid grid = new Grid(200, 200, 200);		GridHelper helper = new GridHelper();
+		Grid grid = new Grid(200, 200, 200);		
+		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
 //		r~5a; d ~1.5a;
