@@ -344,18 +344,12 @@ public class Grid {
 			byte[][][] volume = this.grid.clone();
 			
 			//normalizing the array
-			for(Point p : particles) {
+			for(Point p : particles) 
+			{
 				volume[p.x][p.y][p.z] = 1;
 			}
-			
+	
 			Point p;
-			
-			
-//			System.out.println(this.queue.size());
-//			System.out.println(particles.size());
-			
-			
-			
 			
 			while(true)
 			{
@@ -364,13 +358,29 @@ public class Grid {
 				
 				for(Point pp : particles) {
 					if(volume[pp.x][pp.y][pp.z] == 1) {
+						
 						q.add(pp);
+						volume[pp.x][pp.y][pp.z] = 10;
+						
+						break;
 					}
 				}
+			
+//				if(particles.size() > 0)
+//				{
+//					q.add(particles.get(0));	
+//				}
+//				else {
+//					break;
+//				}
+//				
+				
 				
 				if(q.size() == 0) break;
-				
-//				q.add(particles.get(0));
+				else if(q.size() == 1) System.out.println(String.format("%s    <%s>     ", 
+						getNeirbourghsCount(q.get(0).x,q.get(0).y, q.get(0).z),
+						q.get(0).toString() )
+						);
 				
 				for(int n = 0; n < q.size(); n++) 
 				{
@@ -402,14 +412,10 @@ public class Grid {
 								}
 							}
 						}		
-						
-						
-						
-						
-						n++;
+//						n++;
 					}	
 				}
-				System.out.println("----------------------------");	
+				System.out.println("----------------------------   " + q.size());	
 				data.add(new ClusterData(new ArrayList<Point>(q)));
 			}
 			
@@ -419,6 +425,4 @@ public class Grid {
 		
 		return data;
 	}
-	
-	
 }

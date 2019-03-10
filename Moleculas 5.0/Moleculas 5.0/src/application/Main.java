@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Logger.INSTANCE.startLog();
-		Grid grid = new Grid(200, 200, 100);		GridHelper helper = new GridHelper();
+		Grid grid = new Grid(60, 60, 60);		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
 //		r~5a; d ~1.5a;
@@ -30,7 +30,7 @@ public class Main {
 //		System.out.println(grid.getNeirbourghsCount(1, 1, 1));
 //		System.out.println(grid.grid[1][1][1]);
 
-		System.out.println(grid.queue.size());
+//		System.out.println(grid.queue.size());
 //		System.out.println(grid.CollectClusterData().size());
 		ArrayList<ClusterData> data = grid.CollectClusterData();
 		System.out.println(data.size());
