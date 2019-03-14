@@ -11,6 +11,7 @@ import java.util.Date;
 
 import Helpers.Point;
 import application.Logger;
+import application.Writable;
 
 public class GridHelper implements IPaintable{
 
@@ -31,27 +32,36 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
-		exportForVMD("fsds.pdb");
+		Logger.log.logDebugSnapshot(new Writable() {
+			
+			private String name;
+			
+			@Override
+			public void write(BufferedWriter writer) throws IOException {
+				exportForVMD(writer);
+			}
+			
+			@Override
+			public String getName() {
+				return "Debug.pdb";
+			}
+
+			@Override
+			public void setName(String name) {
+				this.name = name; 
+			}
+		});
 	}
 	
-	public void exportForVMD(String path) throws IOException {
+	public void exportForVMD(BufferedWriter writer) throws IOException {
 		synchronized(grid.grid) {
-			File file = new File(/*Logger.INSTANCE.getSession(),*/path);
-			file.createNewFile();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			
+						
 			for(Point p : grid.queue) {
-				
-				//if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) 
 				{
 					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 				}
 				
 			}
-			
-			
-			writer.flush();
-			writer.close();
 		}
 	}
 	
@@ -76,18 +86,46 @@ public class GridHelper implements IPaintable{
 				grid.rearrange();
 				
 				double size = grid.queue.size();
-				double step = 0;
+				Integer step = 0;
 				
-				
-				
+				Writable snapshot = new Writable() {
+					
+					private String name;
+					
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						exportForVMD(writer);
+					}
+					
+					@Override
+					public String getName() {
+						return name;
+					}
+					
+					@Override
+					public void setName(String name) {
+						this.name =  name;
+					}
+				};
+
 				while(calculationRunning) {
 					
 						if(size < grid.queue.size()) {
 							size = grid.queue.size();
-							System.out.println(step + "   " + grid.queue.size());
+							Logger.log.println(String.format("Particles were added! Step: %s; CurrentCount: %s", step, grid.queue.size()));
 						}
 						
-						for(int j = 0; j < 1000; j++) {
+						grid.setAlpha(getTemperature(step));
+						Logger.log.logTemperature(step, grid.alpha);
+						
+						ArrayList<ClusterData> data = grid.CollectClusterData();
+						Logger.log.logIntegrity(step, data);
+						
+						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
+						Logger.log.logSnapshot(snapshot);
+						
+						
+						for(int j = 0; j < 100; j++) {
 							for(int i = 0; i < grid.queue.size(); i++) {
 								synchronized(grid.grid) {	
 									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
@@ -95,35 +133,10 @@ public class GridHelper implements IPaintable{
 							}
 						}
 						
-						step += 1000;
-
-						Logger.INSTANCE.write(String.format("Steps done: %s", step));
-
+						step += 100;
 						
-						ArrayList<ClusterData> data = grid.CollectClusterData();
-						
-						Logger.INSTANCE.write(String.format("Clusters count: %s", data.size()));
-						
-						StringBuilder builder = new StringBuilder("{");
-						
-						for(ClusterData cd : data) 
-						{
-							builder.append(String.format("(%s)", cd.size()));
-						}
-						
-						builder.append("}");
-						Logger.INSTANCE.write(String.format("%s", builder.toString()));
-						
-//						Logger.INSTANCE.write("-------------------------------------");
-						
-						//
-						
-						try {
-							exportForVMD(String.format("Snapshots//snapshot_%s.pdb", step));
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						//стопор процесу для ПОТОЧНОГО графіку тмператури
+						if(grid.alpha > 2.6) calculationRunning = false;
 				}
 			}
 		};
@@ -158,6 +171,19 @@ public class GridHelper implements IPaintable{
 		grid.setAlpha(d);
 	}
 
+	private double getTemperature(int step) { 
+		double value;
+		
+		if(step < 50000)
+		{
+			value = 1 / (0.00002 * step + 0.4);
+		}
+		else {
+			value = 1 / ( - 0.00001 * step + 1.9);
+		}
+		
+		return value;
+	}
 
 	@Override
 	public void paint(Graphics2D g) {

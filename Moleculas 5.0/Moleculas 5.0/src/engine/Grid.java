@@ -26,19 +26,6 @@ public class Grid {
 	
 	private boolean[][][] validationPattern;
 	
-	
-	//#region optimization garbage section
-	
-//	private Point isValidTempPoint;
-	
-	//#endregion
-	
-	//bounded = 10
-	//unbound = 1
-	//absent = 0
-	//plane = 127
-//	public boolean globalHandle;
-	
 	public Grid() {
 		this(100, 100, 100);
 	}
@@ -79,7 +66,7 @@ public class Grid {
 		double ep0 = Math.pow(Math.E, alpha);
 		p0 = Math.pow(0.685, alpha); // 0.685
 
-		Logger.INSTANCE.write(String .format("alpha: %s; p0: %s", alpha, p0));
+		//Logger.INSTANCE.write(String .format("alpha: %s; p0: %s", alpha, p0));
 		
 	}
 	

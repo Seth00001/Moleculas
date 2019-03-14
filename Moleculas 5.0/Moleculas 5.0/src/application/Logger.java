@@ -1,83 +1,166 @@
 package application;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
-public enum Logger {
-    INSTANCE;
-    private File root, session, log;
-    private String title;
-    private String ROOT_FOLDER = "EXPERIMENT_DUMPS";
+import engine.ClusterData;
 
+public class Logger
+{
+    public final static Logger log = new Logger();
+    
+    private static final String ROOT_FOLDER = "Logs";
+    private final String ExperimentDataContainer = String.format("Instance_[%s]", getTimestamp());
+    private final String snapshotFolderName = "Snapshots";
+    private final String snapshotInvariantNamePart = "Snapshot_";
+    private final String integrityLogFileName = "Integrity.txt";
+    private final String tempereratureLogFileName = "Temperature.txt";
+    private final String LogFileName = "Log.txt";
+    
+    private BufferedWriter integrityLogWriter;
+    private BufferedWriter temperatureLogWriter;
+    private BufferedWriter logWriter;
+    
+
+    protected Logger() 
     {
-        title = getFolderTitle();
-        initRootFolder();
-        initSessionFolder(root);
-        initLogFile(session,title+".txt");
+    	try {
+			initializeLoggingSession();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
-    private void initLogFile(File root, String title){
-        log = new File(root,title);
-        try {
-            log.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void initializeLoggingSession() throws IOException {
+    	File snapshotsFolder = new File(String.format("%s\\%s\\%s\\", ROOT_FOLDER, ExperimentDataContainer, snapshotFolderName));
+    	snapshotsFolder.mkdirs(); 	
+    	
+    	integrityLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, integrityLogFileName)), true));
+    	temperatureLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, tempereratureLogFileName)), true));
+    	logWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, LogFileName)), true));
+    }
+    
+    
+    public void println(String s) {
+    	String message = String.format("Time: %s <nanos: %s>|  %s", getTimestamp(), System.nanoTime(),  s);
+    	System.out.println(message);
+    	try {
+			logWriter.write(message);
+			logWriter.newLine();
+			logWriter.flush();
+		} catch (Exception e) {
+			System.err.println(String.format("Failed to append stream: <logWriter> \r\n	%s", (Object)e.getStackTrace() ));
+		}
+    }
+    
+    public static String getTimestamp() { 
+    	SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy MM dd (HH_mm_ss)");
+	    Date now = new Date();
+	    return sdfDate.format(now);    	
+    }
+    
+    public void logSnapshot(Writable loggedOject) {
+    	Logger.log.println("Logging snapshot...");
+    	try {
+	    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s\\%s%s", 
+	    			ROOT_FOLDER, 
+	    			ExperimentDataContainer, 
+	    			snapshotFolderName, 
+	    			snapshotInvariantNamePart,
+	    			loggedOject.getName())), true));
+	    	
+	    	loggedOject.write(writer);
+	    	writer.flush();
+	    	writer.close();
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	Logger.log.println("Logging snapshot finished");
     }
 
-    private void initSessionFolder(File root){
-        session = new File(root,title);
-        if(!session.exists()||!session.isDirectory()){
-            session.mkdir();
-        }
+    public void logIntegrity(int step, ArrayList<ClusterData> integrityData) {
+    	StringBuilder builder = new StringBuilder();
+    	
+    	for(ClusterData data : integrityData){
+    		builder.append(String.format("%s;", data.size()));	
+    	}
+    	
+    	try {
+			integrityLogWriter.write(String.format("{%s | (%s)}\r\n", step, builder.toString()));
+			integrityLogWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	Logger.log.println("Integrity data writing finished");
     }
+    
+    public void logTemperature(int step, double value) {    	
+    	try {
+    		temperatureLogWriter.write(String.format("%s | %s\r\n", step, value));
+    		temperatureLogWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	finally {
+    		Logger.log.println(String.format("Step: %s; Temperature: %s", step, value));
+    	}
+    }
+    
+    public void logDebugSnapshot(Writable loggedOject) {
+    	Logger.log.println("Logging debug snapshot...");
+    	try {
+	    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File(loggedOject.getName()), true));
+	    	
+	    	loggedOject.write(writer);
+	    	
+			writer.flush();
+	    	writer.close();
+    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	finally {
+    		Logger.log.println("Debug snapshot is logged");
+    	}
+    }
+    
+    @Override
+    public void finalize() {
+    	
+    	try {
+    		integrityLogWriter.flush();
+    		integrityLogWriter.close();
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    	
+		try {
+			temperatureLogWriter.flush();
+			temperatureLogWriter.close();
+    	}
+    	catch(Exception e) {
+    		
+    	}
 
-    private void initRootFolder(){
-        root = new File(ROOT_FOLDER);
-        if(!root.exists()||!root.isDirectory()){
-            root.mkdirs();
-        }
+		try {
+			logWriter.flush();
+			logWriter.close();
+		}
+		catch(Exception e) {
+			
+		}
+		
     }
-
-    private String getFolderTitle(){
-        StringBuilder sb = new StringBuilder();
-        Calendar cal = Calendar.getInstance();
-        sb.append(cal.get(Calendar.DAY_OF_MONTH)).append("-").append(1+cal.get(Calendar.MONTH)).append("-").append(cal.get(Calendar.YEAR)).append("_");
-        sb.append(cal.get(Calendar.HOUR_OF_DAY)).append("-").append(cal.get(Calendar.MINUTE)).append("-").append(cal.get(Calendar.SECOND));
-        return sb.toString();
-    }
-
-    public void write(String text) {
-        System.out.println(text);
-        FileWriter fr = null;
-        try {
-            fr = new FileWriter(log,true);
-            fr.write(String.format("%-15s  %s \n",getCurrentTime(),text));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void startLog(){
-        write("\t -Started-");
-    }
-
-    private String getCurrentTime(){
-        Calendar cal = Calendar.getInstance();
-        StringBuilder sb = new StringBuilder();
-        sb.append(cal.get(Calendar.HOUR_OF_DAY)).append(":").append(cal.get(Calendar.MINUTE)).append(":").append(cal.get(Calendar.SECOND)).append(":").append(cal.get(Calendar.MILLISECOND));
-        return sb.toString();
-    }
-
-    public File getSession() {
-        return session;
-    }
+    
 }
