@@ -88,7 +88,7 @@ public class Logger
     	Logger.log.println("Logging snapshot finished");
     }
 
-    public void logIntegrity(int step, ArrayList<ClusterData> integrityData) {
+    public void logIntegrity(int step, double temp, ArrayList<ClusterData> integrityData) {
     	StringBuilder builder = new StringBuilder();
     	
     	for(ClusterData data : integrityData){
@@ -96,7 +96,7 @@ public class Logger
     	}
     	
     	try {
-			integrityLogWriter.write(String.format("{%s | (%s)}\r\n", step, builder.toString()));
+			integrityLogWriter.write(String.format("{%-8d|%-20f| (%s)}\r\n", step, temp, builder.toString()));
 			integrityLogWriter.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

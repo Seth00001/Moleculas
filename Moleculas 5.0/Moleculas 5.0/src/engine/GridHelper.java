@@ -119,7 +119,7 @@ public class GridHelper implements IPaintable{
 						Logger.log.logTemperature(step, grid.alpha);
 						
 						ArrayList<ClusterData> data = grid.CollectClusterData();
-						Logger.log.logIntegrity(step, data);
+						Logger.log.logIntegrity(step, grid.alpha, data);
 						
 						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
 						Logger.log.logSnapshot(snapshot);
