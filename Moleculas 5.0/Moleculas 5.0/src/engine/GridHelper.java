@@ -174,12 +174,20 @@ public class GridHelper implements IPaintable{
 	private double getTemperature(int step) { 
 		double value;
 		
+//		if(step < 50000)
+//		{
+//			value = 1 / (0.00002 * step + 0.4);
+//		}
+//		else {
+//			value = 1 / ( - 0.00001 * step + 1.9);
+//		}
+		
 		if(step < 50000)
 		{
-			value = 1 / (0.00002 * step + 0.4);
+			value = 1 / (0.000014 * step + 0.4);
 		}
 		else {
-			value = 1 / ( - 0.00001 * step + 1.9);
+			value = 1 / ( - 0.000007 * step + 1.75);
 		}
 		
 		return value;
