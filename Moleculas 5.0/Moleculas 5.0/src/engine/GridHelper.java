@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import Helpers.Point;
+import logging.Logger;
+import logging.Writable;
 
 public class GridHelper implements IPaintable{
 
@@ -29,14 +31,37 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
-		exportForVMD("fsds.pdb");
+		Writable snapshot = new Writable() {
+
+			private String name = "fsds.pdb";
+			
+			@Override
+			public void write(BufferedWriter writer) throws Exception {
+				try {
+					exportForVMD(writer);
+				}
+				catch(Exception ex) {
+					Logger.log.println(String.format("%s", ex.getStackTrace()));
+				}
+			}
+
+			@Override
+			public String getName() {
+				return name;
+			}
+
+			@Override
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+		};
+		
+		Logger.log.logDebugSnapshot(snapshot);
 	}
 	
-	public void exportForVMD(String path) throws IOException {
+	public void exportForVMD(BufferedWriter writer) throws IOException {
 		synchronized(grid.grid) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-			
-			
 			for(Point p : grid.queue) {
 				
 				if(/*grid.getNeirbourghsCount(p.x, p.y, p.z) > 9)*/grid.grid[p.x][p.y] [p.z] > 9) 
@@ -45,12 +70,10 @@ public class GridHelper implements IPaintable{
 				}
 				else
 				{
-					writer.write("ATOM    100  B   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+					//writer.write("ATOM    100  B   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 				}
 			}
 			
-			writer.flush();
-			writer.close();
 		}
 	}
 	
@@ -76,95 +99,52 @@ public class GridHelper implements IPaintable{
 				
 				double size = grid.queue.size();
 				double step = 0;
-				
-				long time;
-				long nanoTime;
-				
-				for(int n = 0; n < 40; n++) {
+
+				Writable snapshot = new Writable() {
+
+					private String name;
 					
-					
-					for(int j = 0; j < 100; j++)
-					{
-//						time = System.currentTimeMillis();
-//						nanoTime = System.nanoTime();
-						
-						double probab = grid.probab();
-						if(size < grid.queue.size()) {
-							size = grid.queue.size();
-							System.out.println(step + "   " + grid.queue.size());
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						try {
+							exportForVMD(writer);
 						}
-						grid.refillTopRegion(probab);
-						
-						for(int k = 0; k < 1000; k++) 
-						{
-							for(int i = 0; i < grid.queue.size(); i++) {
-								synchronized(grid.grid) {	
-									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
-								}
-							}
+						catch(Exception ex) {
+							Logger.log.println(String.format("%s", ex.getStackTrace()));
 						}
-							
-						step += 1000;
-						
-//						System.out.println(String.format("Steps done: %s;  Mils eloapsed: %s; Average ns spent: %s; ", 
-//								1000, 
-//								System.currentTimeMillis() - time, 
-//								(System.nanoTime() - nanoTime) / (grid.queue.size()*1000)
-//							
-//							));
-						
-					}	
-					try {
-						exportForVMD("Snapshots//" + step + "  " + grid.concentration + ".pdb");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		
-			
+					}
+
+					@Override
+					public String getName() {
+						return name;
+					}
+
+					@Override
+					public void setName(String name) {
+						this.name = name;
+					}
 					
-				}
-				
-				grid.concentration = grid.concentration * 4 * 15;
+				};
 				
 				while(calculationRunning) {
-
+				
+					Logger.log.println(String.format("Step: %s", step));
+					snapshot.setName(String.format("%s", step));
+					Logger.log.logSnapshot(snapshot);
 					
-					
-
-					
-					for(int j = 0; j < 100; j++)
+					for(int k = 0; k < 100; k++) 
 					{
-						double probab = grid.probab();
-						if(size < grid.queue.size()) {
-							size = grid.queue.size();
-							System.out.println(step + "   " + grid.queue.size());
-						}
-						grid.refillTopRegion(probab);
-						
-						for(int k = 0; k < 1000; k++) 
-						{
-							for(int i = 0; i < grid.queue.size(); i++) {
-								synchronized(grid.grid) {	
-									grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
-								}
+						for(int i = 0; i < grid.queue.size(); i++) {
+							synchronized(grid.grid) {	
+								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
 							}
-							
 						}
-							
-						step += 1000;
 						
-					}	
-					
-					try {
-						exportForVMD("Snapshots//" + step + "  " + grid.concentration + ".pdb");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		
-					
-			
+					}
+						
+					step += 100;
 
-				}
+				}	
 			}
 		};
 		t.start();

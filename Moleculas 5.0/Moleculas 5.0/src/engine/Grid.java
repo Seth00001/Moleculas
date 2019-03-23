@@ -111,6 +111,13 @@ public class Grid {
 	
 	public void setPoint(int i, int j, int k) {
 		if(isValid(i, j, k)) {
+			grid[i][j][k] = 10;
+			queue.add(new Point(i, j, k));
+		}
+	}
+	
+	public void setPointUnbound(int i, int j, int k) {
+		if(isValid(i, j, k)) {
 			grid[i][j][k] = 1;
 			queue.add(new Point(i, j, k));
 		}
@@ -144,21 +151,18 @@ public class Grid {
 	}
 	
 	public boolean hasBoundedNeirbourghs(int x, int y, int z) {
-		boolean has = false;
-		
 		for(int i = -1; i <= 1; i++ ) {
 			for(int j = -1; j <= 1; j++ ) {
 				for(int  k = -1; k <= 1; k++) {
 					if(isValid(x + i, y + j, z + k)
 							&& (i != 0 && j != 0 && k != 0)
 							&& grid[x + i][y + j][z + k] > 9) {
-						has = true;
-						break;
+						return true;
 					}
 				}
 			}
 		}
-		return has;
+		return false;
 	}
 	
 	/*public int getPositionWeight(int x, int y, int z) {
