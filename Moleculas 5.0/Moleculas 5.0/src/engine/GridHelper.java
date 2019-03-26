@@ -21,7 +21,7 @@ public class GridHelper implements IPaintable{
 	//#region paint settings
 	
 	public int currentlyPaintedPlane, halfSize = 2;
-	public double minAlpha = 1; // minimum value of alpha in temperature changing process
+	public double maxCoef = 1; // minimum value of alpha in temperature changing process
 	//#endregion
 	
 	
@@ -176,10 +176,10 @@ public class GridHelper implements IPaintable{
 		
 		if(step < 50000)
 		{
-			value = 1 / (minAlpha/50000 * step + 0.4);
+			value = 1 / ((maxCoef - 0.4)/50000 * step + 0.4);
 		}
 		else {
-			value = 1 / ( - minAlpha/50000 * step + minAlpha * 1.5 + 0.4);
+			value = 1 / ( - (maxCoef - 0.4)/100000 * step + (maxCoef - 0.4) * 1.5 + 0.4);
 		}
 
 		return value;

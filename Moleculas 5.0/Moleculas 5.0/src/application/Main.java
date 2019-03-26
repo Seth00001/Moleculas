@@ -12,7 +12,7 @@ public class Main {
 		Grid grid = new Grid(60, 60, 60);	
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
-		helper.minAlpha = 1.5;
+		helper.maxCoef = 1/1.5;
 		
 //		r~5a; d ~1.5a;
 //		a = 2
