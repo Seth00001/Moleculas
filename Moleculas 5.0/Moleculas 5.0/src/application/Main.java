@@ -13,6 +13,8 @@ public class Main {
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		helper.maxCoef = 1/1.5;
+		helper.minCoef = 1/2.0;
+		helper.steps = 5000;
 		
 //		r~5a; d ~1.5a;
 //		a = 2

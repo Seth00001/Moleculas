@@ -21,7 +21,8 @@ public class GridHelper implements IPaintable{
 	//#region paint settings
 	
 	public int currentlyPaintedPlane, halfSize = 2;
-	public double maxCoef = 1; // minimum value of alpha in temperature changing process
+	public double minCoef = 0.4, maxCoef = 1; // minimum value of alpha in temperature changing process
+	public int steps = 5000;
 	//#endregion
 	
 	
@@ -136,7 +137,7 @@ public class GridHelper implements IPaintable{
 						step += 100;
 						
 						//стопор процесу для ПОТОЧНОГО графіку тмператури
-						if(grid.alpha > 2.6) calculationRunning = false;
+						if(1/grid.alpha < minCoef) calculationRunning = false;
 				}
 			}
 		};
@@ -174,12 +175,12 @@ public class GridHelper implements IPaintable{
 	private double getTemperature(int step) { 
 		double value;
 		
-		if(step < 50000)
+		if(step < steps)
 		{
-			value = 1 / ((maxCoef - 0.4)/50000 * step + 0.4);
+			value = 1 / ((maxCoef - minCoef)/steps * step + minCoef);
 		}
 		else {
-			value = 1 / ( - (maxCoef - 0.4)/100000 * step + (maxCoef - 0.4) * 1.5 + 0.4);
+			value = 1 / ( -0.5 * (maxCoef - minCoef)/steps * step + (3 * maxCoef - minCoef)/2);
 		}
 
 		return value;
