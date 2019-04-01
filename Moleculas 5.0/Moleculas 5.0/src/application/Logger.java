@@ -23,10 +23,12 @@ public class Logger
     private final String snapshotFolderName = "Snapshots";
     private final String snapshotInvariantNamePart = "Snapshot_";
     private final String integrityLogFileName = "Integrity.txt";
+    private final String strengthLogFileName = "Strength.txt";
     private final String tempereratureLogFileName = "Temperature.txt";
     private final String LogFileName = "Log.txt";
     
     private BufferedWriter integrityLogWriter;
+    private BufferedWriter strengthLogWriter;
     private BufferedWriter temperatureLogWriter;
     private BufferedWriter logWriter;
     
@@ -44,6 +46,7 @@ public class Logger
     	File snapshotsFolder = new File(String.format("%s\\%s\\%s\\", ROOT_FOLDER, ExperimentDataContainer, snapshotFolderName));
     	snapshotsFolder.mkdirs(); 	
     	
+    	strengthLogWriter  = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, strengthLogFileName)), true));
     	integrityLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, integrityLogFileName)), true));
     	temperatureLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, tempereratureLogFileName)), true));
     	logWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, LogFileName)), true));
@@ -88,6 +91,23 @@ public class Logger
     	Logger.log.println("Logging snapshot finished");
     }
 
+    public void logStrength(int step, double temp, ArrayList<ClusterData> strengthData) {
+    	StringBuilder builder = new StringBuilder();
+    	
+    	for(ClusterData data : strengthData){
+    		builder.append(String.format("%s;", data.size()));	
+    	}
+    	
+    	try {
+    		strengthLogWriter.write(String.format("{%-8d|%-20f| (%s)}\r\n", step, temp, builder.toString()));
+    		strengthLogWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	Logger.log.println("StrengthData data writing finished");
+    }
+    
     public void logIntegrity(int step, double temp, ArrayList<ClusterData> integrityData) {
     	StringBuilder builder = new StringBuilder();
     	
@@ -138,6 +158,14 @@ public class Logger
     public void finalize() {
     	
     	try {
+    		strengthLogWriter.flush();
+    		strengthLogWriter.close();
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    	
+    	try {
     		integrityLogWriter.flush();
     		integrityLogWriter.close();
     	}
@@ -164,3 +192,4 @@ public class Logger
     }
     
 }
+

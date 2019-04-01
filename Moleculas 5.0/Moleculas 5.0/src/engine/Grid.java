@@ -322,13 +322,20 @@ public class Grid {
 	public ArrayList<ClusterData> CollectClusterData() {
 		ArrayList<ClusterData> data = new ArrayList<ClusterData>();
 		
-//		System.out.println("Collecting data began");
-		
 		synchronized(grid)
 		{
 			
 			LinkedList<Point> particles = new LinkedList<Point>(this.queue);
-			byte[][][] volume = this.grid.clone();
+			//byte[][][] volume = this.grid.clone();
+			byte[][][] volume = new byte[dimX][dimY][dimZ];
+			
+			for(int i = 0; i < dimX; i++) {
+				for(int j = 0; j < dimY; j++) {
+					for(int k = 0; k < dimZ; k++) {
+						volume[i][j][k] = grid[i][j][k];
+					}
+				}
+			}
 			
 			//normalizing the array
 			for(Point p : particles) 
@@ -352,34 +359,12 @@ public class Grid {
 						break;
 					}
 				}
-			
-//				if(particles.size() > 0)
-//				{
-//					q.add(particles.get(0));	
-//				}
-//				else {
-//					break;
-//				}
-//				
-				
-				
+							
 				if(q.size() == 0) break;
-//				else if(q.size() == 1) 
-//					System.out.println(String.format("%s    <%s>     ", 
-//						getNeirbourghsCount(q.get(0).x,q.get(0).y, q.get(0).z),
-//						q.get(0).toString() )
-//						);
 				
 				for(int n = 0; n < q.size(); n++) 
 				{
 					p = q.get(n);
-//					System.out.println(String.format("%s  |  %s  |   <%s>", 
-//							q.size(), 
-//							isValid(p.x, p.y, p.z), 
-////							volume[p.x][p.y][p.z] == 1, 
-//							p.toString()));
-//					if(n % 100 == 0) System.out.println(String.format("Current: %s    Queue: %s    Untouched: %s", n, q.size(), particles.size()));
-					
 					
 					if(isValid(p.x, p.y, p.z)) 
 					{
@@ -392,25 +377,106 @@ public class Grid {
 										Point p1 = new Point(p.x + i, p.y + j, p.z + k);
 										
 										q.add(p1);
-//										particles.remove(p1);
 										
 										volume[p1.x][p1.y][p1.z] = 10;
-//										System.out.println("Added");
 									}
 								}
 							}
 						}		
-//						n++;
 					}	
 				}
-//				System.out.println("----------------------------   " + q.size());	
 				data.add(new ClusterData(new ArrayList<Point>(q)));
 			}
-			
-//			System.out.println(particles.size());	
 
 		}
 		
 		return data;
 	}
+	
+	public ArrayList<ClusterData> CollectinvertedClusterData() {
+		ArrayList<ClusterData> data = new ArrayList<ClusterData>();
+		
+		synchronized(grid)
+		{
+			
+			LinkedList<Point> particles = new LinkedList<Point>(this.queue);
+			byte[][][] volume = new byte[dimX][dimY][dimZ];
+			
+			for(int i = 0; i < dimX; i++) {
+				for(int j = 0; j < dimY; j++) {
+					for(int k = 0; k < dimZ; k++) {
+						if(isValid(i, j, k)) {
+							volume[i][j][k] = 1;
+						}
+					}
+				}
+			}
+
+			//normalizing the array
+			for(Point p : particles) 
+			{
+				volume[p.x][p.y][p.z] = 0;
+			}
+
+			particles = new LinkedList<Point>();
+			for(int i = 0; i < dimX; i++) {
+				for(int j = 0; j < dimY; j++) {
+					for(int k = 0; k < dimZ; k++) {
+						if(volume[i][j][k] == 1) {
+							particles.add(new Point(i, j, k));
+						}
+					}
+				}
+			}
+
+			Point p;
+			
+			while(true)
+			{
+				//collect data for 1 cluster
+				LinkedList<Point> q = new LinkedList<Point>();
+				
+				for(Point pp : particles) {
+					if(volume[pp.x][pp.y][pp.z] == 1) {
+						
+						q.add(pp);
+						volume[pp.x][pp.y][pp.z] = 10;
+						
+						break;
+					}
+				}
+			
+				if(q.size() == 0) break;
+				
+				for(int n = 0; n < q.size(); n++) 
+				{
+					p = q.get(n);
+					
+					if(isValid(p.x, p.y, p.z)) 
+					{
+						for(int i = -1; i <= 1; i++ ) {
+							for(int j = -1; j <= 1; j++ ) {
+								for(int  k = -1; k <= 1; k++) {
+									if(isValid(p.x + i, p.y + j, p.z + k)
+											&& volume[p.x + i][p.y + j][p.z + k] == 1) 
+									{
+										Point p1 = new Point(p.x + i, p.y + j, p.z + k);
+										
+										q.add(p1);
+										
+										volume[p1.x][p1.y][p1.z] = 10;
+									}
+								}
+							}
+						}		
+					}	
+				}
+				data.add(new ClusterData(new ArrayList<Point>(q)));
+			}
+		}
+		
+		return data;
+	}
+
+	
 }

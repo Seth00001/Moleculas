@@ -122,6 +122,9 @@ public class GridHelper implements IPaintable{
 						ArrayList<ClusterData> data = grid.CollectClusterData();
 						Logger.log.logIntegrity(step, grid.alpha, data);
 						
+						ArrayList<ClusterData> strengthData = grid.CollectinvertedClusterData();
+						Logger.log.logStrength(step, grid.alpha, strengthData);
+						
 						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
 						Logger.log.logSnapshot(snapshot);
 						
