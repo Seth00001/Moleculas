@@ -45,6 +45,17 @@ public class Grid {
 			}
 		}
 		
+//		validationPattern[0][0][0] = true;
+//		validationPattern[0][0][2] = true;
+//		validationPattern[0][2][0] = true;
+//		validationPattern[2][0][0] = true;
+//		validationPattern[0][2][2] = true;
+//		validationPattern[2][0][2] = true;
+//		validationPattern[2][2][0] = true;
+//		validationPattern[2][2][2] = true;
+//		
+//		validationPattern[1][1][1] = true;
+						
 		validationPattern[0][0][0] = true;
 		validationPattern[0][0][2] = true;
 		validationPattern[0][2][0] = true;
@@ -54,8 +65,15 @@ public class Grid {
 		validationPattern[2][2][0] = true;
 		validationPattern[2][2][2] = true;
 		
-		validationPattern[1][1][1] = true;
-						
+		validationPattern[0][1][1] = true;
+		validationPattern[1][0][1] = true;
+		validationPattern[1][1][0] = true;
+		
+		validationPattern[2][1][1] = true;
+		validationPattern[1][2][1] = true;
+		validationPattern[1][1][2] = true;
+		
+		
 		grid = new byte[dimX][dimY][dimZ];
 		queue = new ArrayList<Point>();
 		random = new Random();
