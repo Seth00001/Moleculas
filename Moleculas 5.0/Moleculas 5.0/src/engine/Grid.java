@@ -14,7 +14,7 @@ public class Grid {
 	public ArrayList<Point> queue;
 	public Random random;
 	public int dimX, dimY, dimZ;
-	
+	public IntegrityDataCollector collector;
 	//#region environment parameters
 	
 	
@@ -44,6 +44,8 @@ public class Grid {
 				}
 			}
 		}
+
+		collector = new IntegrityDataCollector(this);
 		
 //		validationPattern[0][0][0] = true;
 //		validationPattern[0][0][2] = true;

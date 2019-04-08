@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import engine.ClusterData;
+import engine.IntegrityDataCollector.LayerDataHandler;
 
 public class Logger
 {
@@ -22,6 +23,10 @@ public class Logger
     private final String ExperimentDataContainer = String.format("Instance_[%s]", getTimestamp());
     private final String snapshotFolderName = "Snapshots";
     private final String snapshotInvariantNamePart = "Snapshot_";
+    
+    private final String voidsFolderName = "VoidsData";
+    private final String voidsInvariantNamePart = "VoidSnapshot_";
+    
     private final String integrityLogFileName = "Integrity.txt";
     private final String strengthLogFileName = "Strength.txt";
     private final String tempereratureLogFileName = "Temperature.txt";
@@ -45,6 +50,9 @@ public class Logger
     private void initializeLoggingSession() throws IOException {
     	File snapshotsFolder = new File(String.format("%s\\%s\\%s\\", ROOT_FOLDER, ExperimentDataContainer, snapshotFolderName));
     	snapshotsFolder.mkdirs(); 	
+    	
+    	File voidsFolder = new File(String.format("%s\\%s\\%s\\", ROOT_FOLDER, ExperimentDataContainer, voidsFolderName));
+    	voidsFolder.mkdirs();
     	
     	strengthLogWriter  = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, strengthLogFileName)), true));
     	integrityLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, integrityLogFileName)), true));
@@ -90,6 +98,26 @@ public class Logger
     	}
     	Logger.log.println("Logging snapshot finished");
     }
+    
+    public void logIntegritySnapshot(Writable loggedOject) {
+    	Logger.log.println("Logging integrity snapshot...");
+    	try {
+	    	BufferedWriter writer = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s\\%s%s.txt", 
+	    			ROOT_FOLDER, 
+	    			ExperimentDataContainer, 
+	    			voidsFolderName, 
+	    			voidsInvariantNamePart,
+	    			loggedOject.getName())), true));
+	    	
+	    	loggedOject.write(writer);
+	    	writer.flush();
+	    	writer.close();
+    	}
+    	catch(Exception e) {
+    		System.err.println(e.getMessage());
+    	}
+    	Logger.log.println("Logging integrity snapshot finished");
+    }
 
     public void logStrength(int step, double temp, ArrayList<ClusterData> strengthData) {
     	StringBuilder builder = new StringBuilder();
@@ -124,6 +152,7 @@ public class Logger
     	
     	Logger.log.println("Integrity data writing finished");
     }
+    
     
     public void logTemperature(int step, double value) {    	
     	try {

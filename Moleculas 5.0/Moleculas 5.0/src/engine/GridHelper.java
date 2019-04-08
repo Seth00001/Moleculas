@@ -12,6 +12,8 @@ import java.util.Date;
 import Helpers.Point;
 import application.Logger;
 import application.Writable;
+import engine.IntegrityDataCollector.Direction;
+import engine.IntegrityDataCollector.LayerDataHandler;
 
 public class GridHelper implements IPaintable{
 
@@ -108,7 +110,110 @@ public class GridHelper implements IPaintable{
 						this.name =  name;
 					}
 				};
+				
+				Writable voidDataX = new Writable() {
+					
+					private String name;
+					
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						
+						IntegrityDataCollector collector = new IntegrityDataCollector(grid);
+						ArrayList<LayerDataHandler> data = collector.CollectPerLayerInvertedData(Direction.X);
+						for(int i = 0; i < data.size(); i++) {
+	
+							StringBuilder builder = new StringBuilder();
+							
+							for(int j = 0; j < data.get(i).data.size(); j++) {
+								
+								builder.append(String.format("%s, ",data.get(i).data.get(j).size()));
+							}
+							
+							writer.write(builder.substring(0,  builder.length() - 2) + "\r\n");
+						}
+												
+					}
+					
+					@Override
+					public String getName() {
+						return name;
+					}
+					
+					@Override
+					public void setName(String name) {
+						this.name =  name;
+					}
+				};
 
+				Writable voidDataY = new Writable() {
+					
+					private String name;
+					
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						
+						IntegrityDataCollector collector = new IntegrityDataCollector(grid);
+						ArrayList<LayerDataHandler> data = collector.CollectPerLayerInvertedData(Direction.Y);
+						for(int i = 0; i < data.size(); i++) {
+	
+							StringBuilder builder = new StringBuilder();
+							
+							for(int j = 0; j < data.get(i).data.size(); j++) {
+								
+								builder.append(String.format("%s, ",data.get(i).data.get(j).size()));
+							}
+							
+							writer.write(builder.substring(0,  builder.length() - 2) + "\r\n");
+						}
+												
+					}
+					
+					@Override
+					public String getName() {
+						return name;
+					}
+					
+					@Override
+					public void setName(String name) {
+						this.name =  name;
+					}
+				};
+
+				Writable voidDataZ = new Writable() {
+					
+					private String name;
+					
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						
+						IntegrityDataCollector collector = new IntegrityDataCollector(grid);
+						ArrayList<LayerDataHandler> data = collector.CollectPerLayerInvertedData(Direction.Z);
+						for(int i = 0; i < data.size(); i++) {
+	
+							StringBuilder builder = new StringBuilder();
+							
+							for(int j = 0; j < data.get(i).data.size(); j++) {
+								
+								builder.append(String.format("%s, ",data.get(i).data.get(j).size()));
+							}
+							
+							writer.write(builder.substring(0,  builder.length() - 2) + "\r\n");
+						}
+												
+					}
+					
+					@Override
+					public String getName() {
+						return name;
+					}
+					
+					@Override
+					public void setName(String name) {
+						this.name =  name;
+					}
+				};
+
+				
 				while(calculationRunning) {
 					
 						if(size < grid.queue.size()) {
@@ -127,6 +232,15 @@ public class GridHelper implements IPaintable{
 						
 						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
 						Logger.log.logSnapshot(snapshot);
+						
+						voidDataX.setName("X_" + step);
+						Logger.log.logIntegritySnapshot(voidDataX);
+						
+						voidDataY.setName("Y_" + step);
+						Logger.log.logIntegritySnapshot(voidDataY);
+						
+						voidDataZ.setName("Z_" + step);
+						Logger.log.logIntegritySnapshot(voidDataZ);
 						
 						
 						for(int j = 0; j < 100; j++) {

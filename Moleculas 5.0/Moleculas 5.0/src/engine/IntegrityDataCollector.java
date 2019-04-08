@@ -14,46 +14,65 @@ public class IntegrityDataCollector {
 		this.grid = grid;
 	}
 	
-	public ArrayList<LayerDataHandler> CollectPerLayerData() {
+	public ArrayList<LayerDataHandler> CollectPerLayerData(Direction normal) {
 		
 		ArrayList<LayerDataHandler> data = new ArrayList<LayerDataHandler>();
 		sample = copyGrid(grid.grid);
 		
-		for(int i = 0; i < grid.dimX; i++) {
-			data.add(GetLayerData(i, Direction.X));
+		int  limit = 0;
+		switch(normal) {
+			case X:{
+				limit = grid.dimX;
+				break;
+			}
+		
+			case Y:{
+				limit = grid.dimY;
+				break;
+			}
+			
+			case Z:{
+				limit = grid.dimZ;
+				break;
+			}
 		}
 		
-		for(int i = 0; i < grid.dimY; i++) {
-			data.add(GetLayerData(i, Direction.Y));
-		}
-		
-		for(int i = 0; i < grid.dimZ; i++) {
-			data.add(GetLayerData(i, Direction.Z));
+		for(int i = 0; i < limit; i++) {
+			data.add(GetLayerData(i, normal));
 		}
 		
 		return data;
 	}
 	
-	public ArrayList<LayerDataHandler> CollectPerLayerInvertedData() {
+	public ArrayList<LayerDataHandler> CollectPerLayerInvertedData(Direction normal) {
 		
 		ArrayList<LayerDataHandler> data = new ArrayList<LayerDataHandler>();
 		sample = copyInvertedGrid(grid.grid);
 		
-		for(int i = 0; i < grid.dimX; i++) {
-			data.add(GetLayerData(i, Direction.X));
+		int  limit = 0;
+		switch(normal) {
+			case X:{
+				limit = grid.dimX;
+				break;
+			}
+		
+			case Y:{
+				limit = grid.dimY;
+				break;
+			}
+			
+			case Z:{
+				limit = grid.dimZ;
+				break;
+			}
 		}
 		
-		for(int i = 0; i < grid.dimY; i++) {
-			data.add(GetLayerData(i, Direction.Y));
-		}
-		
-		for(int i = 0; i < grid.dimZ; i++) {
-			data.add(GetLayerData(i, Direction.Z));
+		for(int i = 0; i < limit; i++) {
+			data.add(GetLayerData(i, normal));
 		}
 		
 		return data;
-	}
-	
+	}	
 	
 	public LayerDataHandler GetLayerData(int layer, Direction normalDirection) { 
 		LayerDataHandler layerData = new LayerDataHandler();
@@ -67,7 +86,7 @@ public class IntegrityDataCollector {
 		for(int i = normalDirection == Direction.X ? layer : 0; normalDirection == Direction.X ? i == layer : i < grid.dimX; i = normalDirection == Direction.X ? grid.dimX : i + 1) {
 			for(int j = normalDirection == Direction.Y ? layer : 0; normalDirection == Direction.Y ? j == layer : j < grid.dimY; j = normalDirection == Direction.Y ? grid.dimY : j + 1) {
 				for(int k = normalDirection == Direction.Z ? layer : 0; normalDirection == Direction.Z ? k == layer : k < grid.dimZ; k = normalDirection == Direction.Z ? grid.dimZ : k + 1) {
-					if(sample[i][j][k] != 0) 
+					if(isValid(i, j, k) && sample[i][j][k] != 0) 
 					{				
 						data = new ArrayList<Point>();
 						queue = new LinkedList<Point>();
@@ -227,6 +246,9 @@ public class IntegrityDataCollector {
 				for(int k = 0; k < grid.dimZ; k++) {
 					if(g[i][j][k] == 0) {
 						res[i][j][k] = 1;
+					}
+					else {
+						res[i][j][k] = 0;
 					}
 				}
 			}
