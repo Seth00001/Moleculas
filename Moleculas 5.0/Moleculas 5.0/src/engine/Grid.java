@@ -127,7 +127,7 @@ public class Grid {
 			for(int j = -1; j <= 1; j++ ) {
 				for(int  k = -1; k <= 1; k++) {
 					if(isValid(x + i, y + j, z + k)
-							&& (i != 0 && j != 0 && k != 0)
+							&& !(i == 0 && j == 0 && k == 0)
 							&& grid[x + i][y + j][z + k] > 9) {
 						count++;
 					}
@@ -144,7 +144,7 @@ public class Grid {
 			for(int j = -1; j <= 1; j++ ) {
 				for(int  k = -1; k <= 1; k++) {
 					if(isValid(x + i, y + j, z + k)
-							&& (i != 0 && j != 0 && k != 0)
+							&& !(i == 0 && j == 0 && k == 0)
 							&& grid[x + i][y + j][z + k] > 9) {
 						return true;
 						/*has = true;
