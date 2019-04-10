@@ -22,7 +22,7 @@ public class GridHelper implements IPaintable{
 	
 	//#region paint settings
 	
-	public int currentlyPaintedPlane, halfSize = 20;
+	public int currentlyPaintedPlane, halfSize = 2;
 	public double minCoef = 0.4, maxCoef = 1; // minimum value of alpha in temperature changing process
 	public int steps = 5000;
 	//#endregion
@@ -221,26 +221,23 @@ public class GridHelper implements IPaintable{
 							Logger.log.println(String.format("Particles were added! Step: %s; CurrentCount: %s", step, grid.queue.size()));
 						}
 						
-						//grid.setAlpha(getTemperature(step));
+						grid.setAlpha(getTemperature(step));
 						Logger.log.logTemperature(step, grid.alpha);
 						
-//						ArrayList<ClusterData> data = grid.CollectClusterData();
-//						Logger.log.logIntegrity(step, grid.alpha, data);
-//						
-//						ArrayList<ClusterData> strengthData = grid.CollectinvertedClusterData();
-//						Logger.log.logStrength(step, grid.alpha, strengthData);
+						ArrayList<ClusterData> data = grid.CollectClusterData();
+						Logger.log.logIntegrity(step, grid.alpha, data);
+												
+						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
+						Logger.log.logSnapshot(snapshot);
 						
-//						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
-//						Logger.log.logSnapshot(snapshot);
-//						
-//						voidDataX.setName("X_" + step);
-//						Logger.log.logIntegritySnapshot(voidDataX);
-//						
-//						voidDataY.setName("Y_" + step);
-//						Logger.log.logIntegritySnapshot(voidDataY);
-//						
-//						voidDataZ.setName("Z_" + step);
-//						Logger.log.logIntegritySnapshot(voidDataZ);
+						voidDataX.setName("X_" + step);
+						Logger.log.logIntegritySnapshot(voidDataX);
+						
+						voidDataY.setName("Y_" + step);
+						Logger.log.logIntegritySnapshot(voidDataY);
+						
+						voidDataZ.setName("Z_" + step);
+						Logger.log.logIntegritySnapshot(voidDataZ);
 						
 						
 						for(int j = 0; j < 100; j++) {
@@ -254,7 +251,7 @@ public class GridHelper implements IPaintable{
 						step += 100;
 						
 						//стопор процесу для ПОТОЧНОГО графіку тмператури
-						//if(1/grid.alpha < minCoef) calculationRunning = false;
+						if(1/grid.alpha < minCoef) calculationRunning = false;
 				}
 			}
 		};
@@ -311,16 +308,14 @@ public class GridHelper implements IPaintable{
 		
 		
 		g.setColor(Color.BLUE);
-		
-//		g.fillRect(0, 0, 10, 10);
-		
+
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				
 				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
 //					g.setColor(Color.BLUE);
-//					g.fillRect( ( i) * halfSize, (  j) * halfSize, 1 * halfSize, 1 * halfSize);
-					g.fillOval( ( i) * halfSize, (  j) * halfSize, 1 * halfSize, 1 * halfSize);
+					g.fillRect( ( i) * halfSize, (  j) * halfSize, 1 * halfSize, 1 * halfSize);
+//					g.fillOval( ( i) * halfSize, (  j) * halfSize, 1 * halfSize, 1 * halfSize);
 				}
 				else {
 //					g.setColor(Color.GRAY);

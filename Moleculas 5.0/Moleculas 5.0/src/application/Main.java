@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		//Logger.INSTANCE.startLog();
-		Grid grid = new Grid(60, 60, 60);	
+		Grid grid = new Grid(250, 250, 250);	
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		helper.maxCoef = 1/1.5;
