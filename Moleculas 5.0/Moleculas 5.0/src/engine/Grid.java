@@ -498,5 +498,21 @@ public class Grid {
 		return data;
 	}
 
+	public double getAverageLinksCount() {
+		int neirbourghs = 0;
+		int particlesCount = 0;
+		
+		int tempNC = 0;
+		
+		for(Point p : queue) {
+			tempNC = getNeirbourghsCount(p.x, p.y, p.z);
+			if(tempNC < 8) {
+				neirbourghs = neirbourghs + tempNC; 
+				particlesCount++;
+			}
+		}
+		
+		return neirbourghs/particlesCount;
+	}
 	
 }

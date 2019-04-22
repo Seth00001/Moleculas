@@ -221,6 +221,8 @@ public class GridHelper implements IPaintable{
 							Logger.log.println(String.format("Particles were added! Step: %s; CurrentCount: %s", step, grid.queue.size()));
 						}
 						
+						Logger.log.println(String.format("AverageLinksCount: %s", grid.getAverageLinksCount()));
+						
 						grid.setAlpha(getTemperature(step));
 						Logger.log.logTemperature(step, grid.alpha);
 						
