@@ -23,7 +23,6 @@ public class GridHelper implements IPaintable{
 	
 	//#endregion
 	
-	
 	public GridHelper() {
 		calculationRunning = false;
 		currentlyPaintedPlane = 0;
@@ -132,7 +131,7 @@ public class GridHelper implements IPaintable{
 					snapshot.setName(String.format("%s", step));
 					Logger.log.logSnapshot(snapshot);
 					
-					for(int k = 0; k < 100; k++) 
+					for(int k = 0; k < 1000; k++) 
 					{
 						for(int i = 0; i < grid.queue.size(); i++) {
 							synchronized(grid.grid) {	
@@ -142,7 +141,7 @@ public class GridHelper implements IPaintable{
 						
 					}
 						
-					step += 100;
+					step += 1000;
 
 				}	
 			}
@@ -186,23 +185,17 @@ public class GridHelper implements IPaintable{
 		grid.setAlpha(d);
 	}
 
-
 	@Override
 	public void paint(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 10000, 10000);
-		
-		
-		
+
 		g.setColor(Color.BLUE);
-		
-//		g.fillRect(0, 0, 10, 10);
 		
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				
 				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
-//					g.setColor(Color.BLUE);
 					g.fillRect( ( i) * halfSize, (  j) * halfSize, 2 * halfSize, 2 * halfSize);
 				}
 				else {
@@ -212,8 +205,7 @@ public class GridHelper implements IPaintable{
 				
 			}
 		}
-		
-		
+
 	}
 	
 }

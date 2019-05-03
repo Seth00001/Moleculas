@@ -196,6 +196,7 @@ public class Grid {
 							&& grid[x + i][y + j][z + k] == 0 
 							) {
 						data.add(new PositionData(x + i, y + j, z + k, 
+//								getNeirbourghsCount(x + i, y + j, z + k) != 0 ? Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k))) : 0
 								Math.exp( alpha * (getNeirbourghsCount(x + i, y + j, z + k)))
 								));
 					}
