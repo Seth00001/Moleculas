@@ -30,11 +30,13 @@ public class Logger
     private final String integrityLogFileName = "Integrity.txt";
     private final String strengthLogFileName = "Strength.txt";
     private final String tempereratureLogFileName = "Temperature.txt";
+    private final String energyLogFileName = "Energy.txt";
     private final String LogFileName = "Log.txt";
     
     private BufferedWriter integrityLogWriter;
     private BufferedWriter strengthLogWriter;
     private BufferedWriter temperatureLogWriter;
+    private BufferedWriter energyLogWriter;
     private BufferedWriter logWriter;
     
 
@@ -57,6 +59,7 @@ public class Logger
     	strengthLogWriter  = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, strengthLogFileName)), true));
     	integrityLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, integrityLogFileName)), true));
     	temperatureLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, tempereratureLogFileName)), true));
+    	energyLogWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, energyLogFileName)), true));
     	logWriter = new BufferedWriter(new FileWriter(new File(String.format("%s\\%s\\%s", ROOT_FOLDER, ExperimentDataContainer, LogFileName)), true));
     }
     
@@ -153,7 +156,6 @@ public class Logger
     	Logger.log.println("Integrity data writing finished");
     }
     
-    
     public void logTemperature(int step, double value) {    	
     	try {
     		temperatureLogWriter.write(String.format("%s | %s\r\n", step, value));
@@ -163,6 +165,24 @@ public class Logger
 		}
     	finally {
     		Logger.log.println(String.format("Step: %s; Temperature: %s", step, value));
+    	}
+    }
+    
+    public void logEnergy(int step, int[] distribution)  {    	
+    	
+    	StringBuilder b = new StringBuilder();
+    	for(int i: distribution) {
+    		b.append(i + " | ");
+    	}
+    	
+    	try {
+    		energyLogWriter.write(String.format("%s | %s\r\n", step, b.toString()));
+    		energyLogWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	finally {
+    		Logger.log.println(String.format("Step: %s; Energy: %s", step, b.toString()));
     	}
     }
     

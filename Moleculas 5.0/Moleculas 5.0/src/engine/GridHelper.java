@@ -232,6 +232,8 @@ public class GridHelper implements IPaintable{
 						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
 						Logger.log.logSnapshot(snapshot);
 						
+						Logger.log.logEnergy(step, grid.getEnergyData());
+						
 						voidDataX.setName("X_" + step);
 						Logger.log.logIntegritySnapshot(voidDataX);
 						

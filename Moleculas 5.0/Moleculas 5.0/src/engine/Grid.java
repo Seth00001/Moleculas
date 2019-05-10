@@ -515,4 +515,18 @@ public class Grid {
 		return neirbourghs/particlesCount;
 	}
 	
+	public int[] getEnergyData() {
+		int[] data = new int[14];
+		int tempNC = 0;
+		
+		for(Point p : queue) {
+			tempNC = getNeirbourghsCount(p.x, p.y, p.z);
+			data[tempNC]++;
+		}
+		
+		data[13] = queue.size();
+		
+		return data;
+	}
+	
 }
