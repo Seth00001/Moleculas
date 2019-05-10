@@ -221,27 +221,27 @@ public class GridHelper implements IPaintable{
 							Logger.log.println(String.format("Particles were added! Step: %s; CurrentCount: %s", step, grid.queue.size()));
 						}
 						
-						Logger.log.println(String.format("AverageLinksCount: %s", grid.getAverageLinksCount()));
+//						Logger.log.println(String.format("AverageLinksCount: %s", grid.getAverageLinksCount()));
 						
-						grid.setAlpha(getTemperature(step));
-						Logger.log.logTemperature(step, grid.alpha);
+//						grid.setAlpha(getTemperature(step));
+//						Logger.log.logTemperature(step, grid.alpha);
 						
-						ArrayList<ClusterData> data = grid.CollectClusterData();
-						Logger.log.logIntegrity(step, grid.alpha, data);
+//						ArrayList<ClusterData> data = grid.CollectClusterData();
+//						Logger.log.logIntegrity(step, grid.alpha, data);
 												
 						snapshot.setName(String.format("%s.pdb", Integer.toString(step)));
 						Logger.log.logSnapshot(snapshot);
 						
 						Logger.log.logEnergy(step, grid.getEnergyData());
 						
-						voidDataX.setName("X_" + step);
-						Logger.log.logIntegritySnapshot(voidDataX);
-						
-						voidDataY.setName("Y_" + step);
-						Logger.log.logIntegritySnapshot(voidDataY);
-						
-						voidDataZ.setName("Z_" + step);
-						Logger.log.logIntegritySnapshot(voidDataZ);
+//						voidDataX.setName("X_" + step);
+//						Logger.log.logIntegritySnapshot(voidDataX);
+//						
+//						voidDataY.setName("Y_" + step);
+//						Logger.log.logIntegritySnapshot(voidDataY);
+//						
+//						voidDataZ.setName("Z_" + step);
+//						Logger.log.logIntegritySnapshot(voidDataZ);
 						
 						
 						for(int j = 0; j < 100; j++) {
@@ -255,7 +255,7 @@ public class GridHelper implements IPaintable{
 						step += 100;
 						
 						//стопор процесу для ПОТОЧНОГО графіку тмператури
-						if(1/grid.alpha < minCoef) calculationRunning = false;
+//						if(1/grid.alpha < minCoef) calculationRunning = false;
 				}
 			}
 		};
