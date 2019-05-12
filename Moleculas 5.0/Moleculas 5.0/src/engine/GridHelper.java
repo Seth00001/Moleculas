@@ -13,6 +13,8 @@ public class GridHelper implements IPaintable{
 	public Grid grid;
 	public boolean calculationRunning;  
 	
+	int step = 0;
+	
 	//#region paint settings
 	
 	public int currentlyPaintedPlane, halfSize = 2;
@@ -29,6 +31,25 @@ public class GridHelper implements IPaintable{
 	public void exportForVMD() throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
+		
+		synchronized(grid.grid) {
+			for(Point p : grid.queue) {
+				
+				if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) {
+					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+				}
+				
+			}
+		}
+		
+		
+		writer.flush();
+		writer.close();
+	}
+	
+	public void exportForVMD(String path) throws IOException {
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 		
 		synchronized(grid.grid) {
 			for(Point p : grid.queue) {
@@ -65,10 +86,29 @@ public class GridHelper implements IPaintable{
 			public void run() {
 				while(calculationRunning) {
 					synchronized(grid.grid) {	
-						for(Point p : grid.queue) {
-							grid.jump(p);
-//							System.out.println("Hop!");
+						
+						try {
+							exportForVMD(String.format("Snapshot_%s", step));
+							
+							
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
+						
+						
+						for(int i = 0; i < 1000; i++) {
+							
+							for(Point p : grid.queue) {
+								grid.jump(p);
+//								System.out.println("Hop!");
+							}
+
+						}
+						step += 1000;
+						
+						
+						
+						
 					}
 					grid.rearrange();
 				}
