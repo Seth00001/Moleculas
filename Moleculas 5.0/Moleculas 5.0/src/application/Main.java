@@ -23,8 +23,10 @@ public class Main {
 						//k < grid.dimZ / 2
 						//(i - po.x)*(i - po.x) + (j - po.y)*(j - po.y) + (k - po.z)*(k - po.z) < 10000
 							
-						k < grid.dimX/2 - i + 50
+						//k < grid.dimX/2 - i + 50
 						//Math.random() < 0.01
+							
+						i + j + k < grid.dimX + 30
 							
 					)
 					{

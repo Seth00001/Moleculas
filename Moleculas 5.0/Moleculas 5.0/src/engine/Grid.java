@@ -3,6 +3,7 @@ package engine;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Helpers.DPoint;
 import Helpers.Point;
 
 public class Grid {
@@ -17,6 +18,9 @@ public class Grid {
 	
 	public double alpha = 2; 
 	public double p0 = 0.685;
+	
+	public DPoint normal, offset;
+	public double radius;
 	
 	//#endregion
 	
@@ -82,6 +86,10 @@ public class Grid {
 		
 		concentration = 0.001077 / 4;
 	
+		normal = new DPoint(1, 1, 1);
+		offset = new DPoint(0, 0, 0);
+		radius = 10000; 
+		
 		
 	}
 	
@@ -102,13 +110,23 @@ public class Grid {
 	
 	//marks dimensions and grid specifics
 	public boolean isValid(int x, int y, int z) {
+		
+		Point p = new Point(x, y, z);
+		double d = (normal.x*p.x + normal.y*p.y + normal.z*p.z - normal.x*offset.x - normal.y*offset.y - normal.z*offset.z) 
+				/ (normal.x * normal.x + normal.y * normal.y + normal.z * normal.z) ;
+		
 		return(
 				(x >= 0 && y >= 0 && z >= 0 && x < dimX && y < dimY && z < dimZ)
 				&& validationPattern[x % 4][y % 4][z % 4]
-				&& z > dimX/2 - x
-				&& z < dimX * 1.5 - x
-				&& z < x + dimX / 2
-				&& z > x - dimX / 2
+				&& x + y + z > dimX
+				&& x + y + z < dimX * 2
+				
+				&& ((p.x - d * normal.x - offset.x))*((p.x - d * normal.x - offset.x))
+				+ ((p.y - d * normal.y - offset.y))*((p.y - d * normal.y - offset.y)) 
+				+ ((p.z - d * normal.z - offset.z))*((p.z - d * normal.z - offset.z)) <= radius
+				
+//				&& y < - x + dimX / 2
+//				&& y > - x - dimX / 2
 				//&& (x - dimX*0.5)*(x - dimX*0.5) + (y - dimY*0.5)*(y - dimY*0.5) < dimX*dimX * 0.25
 			);
 	}
