@@ -19,13 +19,18 @@ public class Main {
 			for(int j = 0; j < grid.dimY; j++) {
 				for(int k = 0; k < grid.dimZ; k++) {
 					if(
+//						k == 1 || k == 0
 						//k < grid.dimZ / 2
-						(i - po.x)*(i - po.x) + (j - po.y)*(j - po.y) + (k - po.z)*(k - po.z) < 4000
+						//(i - po.x)*(i - po.x) + (j - po.y)*(j - po.y) + (k - po.z)*(k - po.z) < 10000
+							
+						k < grid.dimX/2 - i + 50
+						//Math.random() < 0.01
+							
 					)
 					{
 						grid.setPoint(i, j, k);
 						
-					}					
+					}		
 				}
 			}
 		}

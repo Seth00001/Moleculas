@@ -99,6 +99,8 @@ public class GridHelper implements IPaintable{
 				double size = grid.queue.size();
 				double step = 0;
 
+				double probab = 0;
+				
 				Writable snapshot = new Writable() {
 
 					private String name;
@@ -127,9 +129,17 @@ public class GridHelper implements IPaintable{
 				
 				while(calculationRunning) {
 				
+					Logger.log.println(String.format("alpha: %s | p0: %s", grid.alpha, grid.p0));
+					
 					Logger.log.println(String.format("Step: %s", step));
-					snapshot.setName(String.format("%s", step));
+					snapshot.setName(String.format("%s.pdb", step));
 					Logger.log.logSnapshot(snapshot);
+					
+//					probab = grid.probab();
+//					
+//					Logger.log.println(Double.toString(probab));
+//					
+//					grid.refillTopRegion(probab);
 					
 					for(int k = 0; k < 1000; k++) 
 					{
