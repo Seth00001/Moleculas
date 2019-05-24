@@ -1,4 +1,4 @@
-package application;
+package innitialConditions;
 
 import java.util.ArrayList;
 
@@ -6,14 +6,14 @@ import Helpers.DPoint;
 import Helpers.Point;
 import engine.Grid;
 
-public class InitialConditionProvider {
+public class InitialConditionProviderBase implements IInitialConditionProvider{
 
 	private boolean[][][] validationPattern;
 	int sphereRadius = 15, sphereDsitance = 10;
 	
 	
 	
-	public InitialConditionProvider() {
+	public InitialConditionProviderBase() {
 		
 		validationPattern = new boolean[5][5][5];
 		
@@ -160,7 +160,7 @@ public class InitialConditionProvider {
 	
 	}
 	
-	public InitialConditionProvider(int radius, int distance) {
+	public InitialConditionProviderBase(int radius, int distance) {
 		this();
 		
 		sphereRadius = radius;

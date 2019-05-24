@@ -2,10 +2,9 @@ package application;
 
 import java.util.ArrayList;
 
-import Helpers.Point;
+import Helpers.*;
 import engine.*;
-import engine.IntegrityDataCollector.Direction;
-import engine.IntegrityDataCollector.LayerDataHandler;
+import innitialConditions.*;
 
 public class Main {
 
@@ -21,7 +20,22 @@ public class Main {
 
 //		r~5a; d ~1.5a;
 //		a = 2
-		InitialConditionProvider conditionProvider = new InitialConditionProvider(50, 100);
+		//IInitialConditionProvider conditionProvider = new InitialConditionProviderBase(50, 100);
+		
+		IDistribution normalDistr = new IDistribution() {
+			public double getRandom() {
+				
+				double sum = 0;
+				
+				for(int i = 0; i < 12; i++) {
+					sum += Math.random();
+				}
+				
+				return 0.5 + sum / 24;
+			}			
+		};
+		
+		IInitialConditionProvider conditionProvider = new InitialConditionPolydisperse(40, grid, normalDistr);
 		conditionProvider.setupEnvironment(grid);
 		
 		
