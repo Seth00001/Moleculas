@@ -2,6 +2,7 @@ package application;
 
 import Helpers.Point;
 import engine.*;
+import initialConditions.CylinderProvider;
 import initialConditions.SphereProvider;
 
 public class Main {
@@ -13,11 +14,12 @@ public class Main {
 		helper.grid = grid;
 		
 		
-		SphereProvider provider = new SphereProvider();
-		provider.radius = 20;
+//		SphereProvider provider = new SphereProvider();
+//		provider.radius = 20;
 		
-		
-		
+		CylinderProvider provider = new CylinderProvider(new Point(1,1,1)); 
+		provider.radius = 30;
+		provider.length = 60;
 		
 		provider.SetUpd(grid);
 		
