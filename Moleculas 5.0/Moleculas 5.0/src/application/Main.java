@@ -2,71 +2,31 @@ package application;
 
 import Helpers.Point;
 import engine.*;
+import initialConditions.CylinderProvider;
+import initialConditions.SphereProvider;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
-		Grid grid = new Grid(400, 400, 400);
+		Grid grid = new Grid(100, 100, 100);
 		GridHelper helper = new GridHelper();
 		helper.grid = grid;
 		
-		Point po = new Point(200, 200, 200);
-		double radius = 60;
 		
+//		SphereProvider provider = new SphereProvider();
+//		provider.radius = 20;
 		
-		for(int i = 0; i < grid.dimX; i++) {
-			for(int j = 0; j < grid.dimY; j++) {
-				for(int k = 0; k < grid.dimZ; k++) {
-					if((i - po.x) * (i - po.x) + (j - po.y) * (j - po.y) + (k - po.z)*(k - po.z) <= radius*radius) {
-					//if(i < 10 && j < 10 && k < 10) {
-						grid.setPoint(i, j, k);
-					}
-				}
-			}
-		}
+		CylinderProvider provider = new CylinderProvider(new Point(1,1,1)); 
+		provider.radius = 30;
+		provider.length = 60;
+		
+		provider.SetUpd(grid);
 		
 		
 		MainWindow win = new MainWindow();
 		win.setHelper(helper);
 		win.setVisible(true);
-//		
-//		System.out.println(grid.getNeirbourghsCount(1, 1, 1));
-
-		
-//		grid.setPoint(1, 1, 1);
-
-//		for(int i = 0; i < 10000; i++) {
-//			for(Point p : grid.queue) {
-//				grid.jump(grid.queue.get(0));
-//			}
-//		}
-//		
-//		
-//		
-//		Point p = grid.queue.get(0);
-//		PositionData d = grid.getNextPosition(p.x, p.y, p.z);
-//		System.out.println(String.format("%d  %d  %d", d.x, d.y, d.z));
-//		System.out.println(grid.getNeirbourghsCount(p.x, p.y, p.z));
-		
-//		for(int i = 0; i < 100; i++) {
-//			for(Point p : grid.queue) {
-//				grid.jump(p);
-//			}
-//		}
-//			try {
-//			
-//			helper.exportForVMD();	
-//		}
-//		catch(Exception e) {
-//			
-//		}
-//		
-		
-		
-		
-		
 		
 	}
 

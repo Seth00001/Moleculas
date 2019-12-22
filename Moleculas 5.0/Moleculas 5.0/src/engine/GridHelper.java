@@ -5,20 +5,23 @@ import java.awt.Graphics2D;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 import Helpers.Point;
+import logging.Logger;
+import logging.Writable;
 
 public class GridHelper implements IPaintable{
 
 	public Grid grid;
 	public boolean calculationRunning;  
+	public boolean snapshotsCreating;
 	
 	//#region paint settings
 	
 	public int currentlyPaintedPlane, halfSize = 2;
 	
 	//#endregion
-	
 	
 	public GridHelper() {
 		calculationRunning = false;
@@ -27,22 +30,50 @@ public class GridHelper implements IPaintable{
 	
 	
 	public void exportForVMD() throws IOException {
+		Writable snapshot = new Writable() {
+
+			private String name = "fsds.pdb";
+			
+			@Override
+			public void write(BufferedWriter writer) throws Exception {
+				try {
+					exportForVMD(writer);
+				}
+				catch(Exception ex) {
+					Logger.log.println(String.format("%s", ex.getStackTrace()));
+				}
+			}
+
+			@Override
+			public String getName() {
+				return name;
+			}
+
+			@Override
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+		};
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter("fsds.pdb"));
-		
+		Logger.log.logDebugSnapshot(snapshot);
+	}
+	
+	public void exportForVMD(BufferedWriter writer) throws IOException {
 		synchronized(grid.grid) {
 			for(Point p : grid.queue) {
 				
-				if(grid.getNeirbourghsCount(p.x, p.y, p.z) > 0) {
+				if(/*grid.getNeirbourghsCount(p.x, p.y, p.z) > 9)*/grid.grid[p.x][p.y] [p.z] > 9) 
+				{
 					writer.write("ATOM    100  N   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
 				}
-				
+				else
+				{
+					//writer.write("ATOM    100  B   VAL A  25     " + (form(10*p.x)) + " " + (form(10*p.y)) + " " + (form(10*p.z)) + "  1.00 12.00      A1   C   " + System.lineSeparator());
+				}
 			}
+			
 		}
-		
-		
-		writer.flush();
-		writer.close();
 	}
 	
 	public String form(int number) {
@@ -65,18 +96,64 @@ public class GridHelper implements IPaintable{
 			public void run() {
 				grid.rearrange();
 				
-				while(calculationRunning) {
-					synchronized(grid.grid) {	
-						
-						
-						for(int i = 0; i < grid.queue.size(); i++) {
-							grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
-//							System.out.println("Hop!");
-						
+				double size = grid.queue.size();
+				double step = 0;
+
+				double probab = 0;
+				
+				Writable snapshot = new Writable() {
+
+					private String name;
+					
+					@Override
+					public void write(BufferedWriter writer) throws Exception {
+						try {
+							exportForVMD(writer);
+						}
+						catch(Exception ex) {
+							Logger.log.println(String.format("%s", ex.getStackTrace()));
 						}
 					}
-					//
-				}
+
+					@Override
+					public String getName() {
+						return name;
+					}
+
+					@Override
+					public void setName(String name) {
+						this.name = name;
+					}
+					
+				};
+				
+				while(calculationRunning) {
+				
+					Logger.log.println(String.format("alpha: %s | p0: %s", grid.alpha, grid.p0));
+					
+					Logger.log.println(String.format("Step: %s", step));
+					snapshot.setName(String.format("%s.pdb", step));
+					Logger.log.logSnapshot(snapshot);
+					
+//					probab = grid.probab();
+//					
+//					Logger.log.println(Double.toString(probab));
+//					
+//					grid.refillTopRegion(probab);
+					
+					for(int k = 0; k < 1000; k++) 
+					{
+						for(int i = 0; i < grid.queue.size(); i++) {
+							synchronized(grid.grid) {	
+								grid.jump(grid.queue.get((grid.random.nextInt(grid.queue.size()))));
+							}
+						}
+						
+					}
+						
+					step += 1000;
+
+				}	
 			}
 		};
 		t.start();
@@ -84,6 +161,14 @@ public class GridHelper implements IPaintable{
 	
 	public void stopCalculation(){
 		calculationRunning = false;
+	}
+	
+	public void beginExporting() {
+		snapshotsCreating = true;
+	}
+	
+	public void endExporting() {
+		snapshotsCreating = false;
 	}
 	
 	public void rearrangeGridQueue() {
@@ -110,23 +195,17 @@ public class GridHelper implements IPaintable{
 		grid.setAlpha(d);
 	}
 
-
 	@Override
 	public void paint(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 10000, 10000);
-		
-		
-		
+
 		g.setColor(Color.BLUE);
-		
-//		g.fillRect(0, 0, 10, 10);
 		
 		for(int i = 0; i < grid.dimX; i++) {
 			for(int j = 0; j < grid.dimY; j++) {
 				
-				if(grid.grid[i][j][currentlyPaintedPlane]) {
-//					g.setColor(Color.BLUE);
+				if(grid.grid[i][j][currentlyPaintedPlane] != 0) {
 					g.fillRect( ( i) * halfSize, (  j) * halfSize, 2 * halfSize, 2 * halfSize);
 				}
 				else {
@@ -136,8 +215,7 @@ public class GridHelper implements IPaintable{
 				
 			}
 		}
-		
-		
+
 	}
 	
 }

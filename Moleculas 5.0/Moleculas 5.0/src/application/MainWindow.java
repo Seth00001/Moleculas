@@ -78,6 +78,18 @@ public class MainWindow extends JFrame{
 		}
 	};
 	
+	private ActionListener alStartExportingVMD = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			helper.beginExporting();
+		}
+	};	
+	
 	private ActionListener alExportVMD = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -123,7 +135,7 @@ public class MainWindow extends JFrame{
 						break;
 					}
 				}
-				setTitle( Integer.toString( helper.currentlyPaintedPlane)  + "   " + helper.getTemperature()); 
+				setTitle( Integer.toString( helper.currentlyPaintedPlane)  + "   " + helper.getTemperature() + "  " + helper.grid.concentration); 
 			}
 
 			@Override
